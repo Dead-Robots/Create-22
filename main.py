@@ -9,8 +9,13 @@ def main():
     '''act.leave_start_box()
     msleep(1000)
     act.turn_right()
-    act.cross_board()'''
-    act.some_action()
+    act.cross_board()
+    act.some_action()'''
+    act.wiper_wiggle()
+    msleep(1000)
+    act.elevator_up()
+    msleep(1000)
+    act.elevator_down()
     act.shut_down()
 
 
