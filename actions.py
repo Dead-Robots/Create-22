@@ -1,7 +1,7 @@
 from kipr import create_connect_once, create_full, create_disconnect, msleep, enable_servos, disable_servos
 
 import constants as c
-from drive import drive, drive_timed, stop, drive_distance_straight
+from drive import drive, drive_timed, stop, spin
 import motors
 import servos
 
@@ -13,16 +13,19 @@ def debug():
     exit(0)
 
 
-def some_action():
-    drive_distance_straight(30, 36)
+# def some_action():
+#     drive_distance_straight(30, 36)
 
 
 def leave_start_box():
-    drive_timed(40, 40, 2500)
-
-
-def turn_right():
-    drive_timed(40, -40, 950)
+    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
+    drive_timed(40, 40, 1000)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
+    spin(20, 950)
+    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
+    drive_timed(40, 40, 1000)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
+    debug()
 
 
 def cross_board():
@@ -30,21 +33,21 @@ def cross_board():
 
 
 def wiper_wiggle():
-    servos.move_timed(0, 1500, 500)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 500)
     msleep(200)
-    servos.move_timed(0, 600, 500)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT, 500)
     msleep(200)
-    servos.move_timed(0, 1500, 500)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 500)
     msleep(200)
-    servos.move_timed(0, 600, 500)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT, 500)
 
 
 def elevator_up():
     motors.move_timed(0, 50, 3000)
 
+
 def elevator_down():
     motors.move_timed(0, -50, 3000)
-
 
 
 def init():

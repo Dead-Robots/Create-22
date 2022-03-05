@@ -6,16 +6,13 @@ import actions as act
 
 def main():
     act.init()
-    '''act.leave_start_box()
+    act.leave_start_box()
     msleep(1000)
-    act.turn_right()
-    act.cross_board()
-    act.some_action()'''
-    act.wiper_wiggle()
-    msleep(1000)
-    act.elevator_up()
-    msleep(1000)
-    act.elevator_down()
+    # act.cross_board()
+    # msleep(1000)
+    # act.elevator_up()
+    # msleep(1000)
+    # act.elevator_down()
     act.shut_down()
 
 
