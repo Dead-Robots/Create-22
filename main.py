@@ -6,6 +6,7 @@ import actions as act
 
 def main():
     act.init()
+    # act.debug()
     act.leave_start_box()
     msleep(1000)
     # act.cross_board()

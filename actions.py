@@ -1,9 +1,20 @@
 from kipr import create_connect_once, create_full, create_disconnect, msleep, enable_servos, disable_servos
 
 import constants as c
-from drive import drive, drive_timed, stop, spin
+from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot
 import motors
 import servos
+
+
+def init():
+    print("initing")
+    if not create_connect_once():
+        print("failed to connect")
+        print("Is the create on?")
+        exit()
+    create_full()
+    enable_servos()
+    # POST()
 
 
 def debug():
@@ -14,10 +25,16 @@ def debug():
 
 
 # def some_action():
-#     drive_distance_straight(30, 36)
+# drive_distance_straight(30, 36)
 
 
 def leave_start_box():
+    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
+    drive_timed(40, 40, 1000)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
+    left_pivot(-40, 375)
+
+    debug()
     servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
     drive_timed(40, 40, 1000)
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
@@ -25,6 +42,16 @@ def leave_start_box():
     servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
     drive_timed(40, 40, 1000)
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
+    spin(20, 450)
+    drive_timed(40, 40, 800)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT, 250)
+    drive_timed(40, 40, 750)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
+    spin(20, 250)
+    drive_timed(40, 40, 650)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT, 250)
+    spin(-20, 100)
+    drive_timed(40, 40, 750)
     debug()
 
 
@@ -47,17 +74,25 @@ def elevator_up():
 
 
 def elevator_down():
-    motors.move_timed(0, -50, 3000)
+    motors.move_timed(0, -50, 2400)
 
 
-def init():
-    print("initing")
-    if not create_connect_once():
-        print("failed to connect")
-        print("Is the create on?")
-        exit()
-    create_full()
-    enable_servos()
+def POST():
+    # moves wiper
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 500)
+    msleep(1000)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT, 500)
+    msleep(1000)
+    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 500)
+
+    # moves elbow and wrist
+    servos.move_timed(c.ELBOW, c.ELBOW_DELIVER, 1000)
+    msleep(1000)
+    servos.move_timed(c.WRIST, c.WRIST_DELIVER, 500)
+    msleep(1000)
+    servos.move_timed(c.WRIST, c.WRIST_START, 500)
+    msleep(1000)
+    servos.move_timed(c.ELBOW, c.ELBOW_START, 1000)
 
 
 def shut_down():

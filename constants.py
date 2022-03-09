@@ -1,12 +1,16 @@
-IS_PRIME = False
+IS_PRIME = True
 IS_CLONE = not IS_PRIME
 
 
 if IS_PRIME:
-    ADJUST_SPEED = 1
+    print("I am prime")
+
+    ADJUST_SPEED = 0.93
 
     # Servo Ports
-    WIPER = 0
+    WRIST = 0
+    WIPER = 1
+    ELBOW = 2
 
     # Motor Ports
     ELEVATOR = 0
@@ -15,13 +19,23 @@ if IS_PRIME:
     WIPER_LEFT = 500
     WIPER_MIDDLE = 1000
     WIPER_RIGHT = 1500
+
+    WRIST_DELIVER = 0
+    WRIST_START = 1000
+
+    ELBOW_DELIVER = 1500
+    ELBOW_START = 330
 
 
 elif IS_CLONE:
+    print("I am clone")
+
     ADJUST_SPEED = 0.95  # Factor for left motor
 
     # Servo Ports
-    WIPER = 0
+    WRIST = 0
+    WIPER = 1
+    ELBOW = 2
 
     # Motor Ports
     ELEVATOR = 0
@@ -30,6 +44,12 @@ elif IS_CLONE:
     WIPER_LEFT = 500
     WIPER_MIDDLE = 1000
     WIPER_RIGHT = 1500
+
+    WRIST_DELIVER = 0
+    WRIST_START = 1000
+
+    ELBOW_DELIVER = 1500
+    ELBOW_START = 330
 
 
 else:
