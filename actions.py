@@ -29,18 +29,25 @@ def debug():
 
 
 def leave_start_box():
+    servos.move_timed(c.WRIST, c.WRIST_START, 250)
+    servos.move_timed(c.ELBOW, c.ELBOW_START, 250)
     servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
-    drive_timed(40, 40, 1000)
+    drive_timed(40, 40, 900)
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
-    left_pivot(-40, 375)
+    drive_timed(40, -20, 700)    # left_pivot(-40, 500)
+    drive_timed(40, 40, 200)
+    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
+    drive_timed(40, 40, 800)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
+    spin(20, 400)
+    # servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
+    drive_timed(40, 40, 700)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT, 250)
+    drive_timed(40, 40, 500)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
 
     debug()
-    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
-    drive_timed(40, 40, 1000)
-    servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
-    spin(20, 950)
-    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
-    drive_timed(40, 40, 1000)
+
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
     spin(20, 450)
     drive_timed(40, 40, 800)
