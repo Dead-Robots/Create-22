@@ -45,6 +45,15 @@ def leave_start_box():
     servos.move_timed(c.WIPER, c.WIPER_LEFT, 250)
     drive_timed(40, 40, 500)
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
+    drive_timed(40, 40, 800)
+    spin(30, 100)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT, 500)
+    drive_timed(40, 40, 800)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT_CRUNCH, 500)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT_CRUNCH, 700)
+    servos.move_timed(c.WRIST, c.WRIST_LIFT, 600)
+
+
 
     debug()
 
