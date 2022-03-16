@@ -1,4 +1,5 @@
-from kipr import create_connect_once, create_full, create_disconnect, msleep, enable_servos, disable_servos
+from kipr import create_connect_once, create_full, create_disconnect, msleep, enable_servos, disable_servos, \
+    enable_servo, push_button
 
 import constants as c
 from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot
@@ -13,7 +14,15 @@ def init():
         print("Is the create on?")
         exit()
     create_full()
-    enable_servos()
+    enable_servo(c.WRIST)
+    servos.move_timed(c.WRIST, c.WRIST_START, 500)
+    enable_servo(c.ELBOW)
+    servos.move_timed(c.ELBOW, c.ELBOW_START, 1000)
+    enable_servo(c.WIPER)
+    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 500)
+    print("push button to continue")
+    while not push_button():
+        pass
     # POST()
 
 
@@ -29,14 +38,11 @@ def debug():
 
 
 def leave_start_box():
-    servos.move_timed(c.WRIST, c.WRIST_START, 250)
-    servos.move_timed(c.ELBOW, c.ELBOW_START, 250)
-    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
     drive_timed(40, 40, 900)
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
-    drive_timed(40, -20, 700)    # left_pivot(-40, 500)
+    drive_timed(40, -20, 700)  # left_pivot(-40, 500)
     drive_timed(40, 40, 200)
-    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT, 250)
     drive_timed(40, 40, 800)
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
     spin(20, 400)
@@ -50,10 +56,26 @@ def leave_start_box():
     servos.move_timed(c.WIPER, c.WIPER_LEFT, 500)
     drive_timed(40, 40, 800)
     servos.move_timed(c.WIPER, c.WIPER_RIGHT_CRUNCH, 500)
-    servos.move_timed(c.WIPER, c.WIPER_LEFT_CRUNCH, 700)
-    servos.move_timed(c.WRIST, c.WRIST_LIFT, 600)
+    # servos.move_timed(c.WIPER, c.WIPER_LEFT_CRUNCH, 700)
+    # servos.move_timed(c.WRIST, c.WRIST_LIFT, 600)
+    servos.move_timed(c.WRIST, 1800, 300)
 
+    # To the airlock
+    spin(20, 370)
+    drive_timed(40, 40, 1500)
+    servos.move_timed(c.WRIST, c.WRIST_START, 300)
+    drive_timed(40, 40, 2000)
+    spin(-20, 210)
+    drive_timed(30, 30, 1650)
+    drive_timed(-25, -25, 850)
+    servos.move_timed(c.ELBOW, c.ELBOW_DELIVER, 1000)
+    servos.move_timed(c.WRIST, c.WRIST_DELIVER, 700)
+    servos.move_timed(c.WIPER, c.WIPER_RIGHT_CRUNCH, 300)
+    drive_timed(30, 30, 940)
+    drive_timed(10, 10, 400)
 
+    # make code for a touch sensor on the wiper to know the right time
+    # to drop the poms in the airlock
 
     debug()
 
