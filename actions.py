@@ -39,6 +39,9 @@ def debug():
 
 def leave_start_box():
     drive_timed(40, 40, 900)
+
+
+def sort_poms():
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
     drive_timed(40, -20, 700)  # left_pivot(-40, 500)
     drive_timed(40, 40, 200)
@@ -49,6 +52,7 @@ def leave_start_box():
     # servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 250)
     drive_timed(40, 40, 700)
     servos.move_timed(c.WIPER, c.WIPER_LEFT, 250)
+    spin(20, 400)
     drive_timed(40, 40, 500)
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
     drive_timed(40, 40, 800)
@@ -77,8 +81,7 @@ def leave_start_box():
     # make code for a touch sensor on the wiper to know the right time
     # to drop the poms in the airlock
 
-    debug()
-
+    # THIS NEEDS TO BE REVISED
     servos.move_timed(c.WIPER, c.WIPER_RIGHT, 250)
     spin(20, 450)
     drive_timed(40, 40, 800)

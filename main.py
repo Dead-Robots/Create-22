@@ -8,6 +8,8 @@ def main():
     act.init()
     # act.debug()
     act.leave_start_box()
+    msleep(100)
+    act.sort_poms()
     msleep(1000)
     # act.cross_board()
     # msleep(1000)
