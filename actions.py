@@ -1,8 +1,8 @@
 from kipr import create_connect_once, create_full, create_disconnect, msleep, enable_servos, disable_servos, \
-    enable_servo, push_button
+    enable_servo, push_button, get_servo_position
 
 import constants as c
-from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot
+from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot, drive_distance_straight, calibrate_gyro
 import motors
 import servos
 
@@ -15,11 +15,12 @@ def init():
         exit()
     create_full()
     enable_servo(c.WRIST)
-    servos.move_timed(c.WRIST, c.WRIST_START, 500)
+    servos.move_timed(c.WRIST, c.WRIST_START, 1000)
     enable_servo(c.ELBOW)
-    servos.move_timed(c.ELBOW, c.ELBOW_START, 1000)
+    servos.move_timed(c.ELBOW, c.ELBOW_START, 2000)
     enable_servo(c.WIPER)
     servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 500)
+    calibrate_gyro()
     print("push button to continue")
     while not push_button():
         pass
@@ -38,7 +39,32 @@ def debug():
 
 
 def leave_start_box():
-    drive_timed(40, 40, 900)
+    servos.move_timed(c.WIPER, c.WIPER_LEFT_CRUNCH, 500)
+    servos.move_timed(c.ELBOW, c.ELBOW_HOVER, 500)
+    servos.move_timed(c.WRIST, c.WRIST_DRIVE, 500)
+    drive_distance_straight(50, 50)
+
+
+def grab_botguy():
+    # servos.move_timed(c.ELBOW, 1200, 1000)
+    servos.move_timed(c.ELBOW, c.ELBOW_GRAB_BOTGUY, 1000)
+    servos.move_timed(c.WRIST, c.WRIST_GRAB_BOTGUY, 1000)
+    spin(-50, 900)
+    drive_distance_straight(50, 15)
+    # servos.move_timed(c.WIPER, 1600, 500)
+    drive_distance_straight(25, 11)
+    # servos.move_timed(c.WIPER, c.WIPER_LEFT, 500)
+
+
+def deliver_to_airlock():
+    drive_distance_straight(-50, 30)
+    spin(50, 900)
+    servos.move_timed(c.ELBOW, c.ELBOW_DELIVER, 750)
+    drive_distance_straight(50, 20)
+    right_pivot(50, 400)
+    while not push_button():
+        pass
+    servos.move_timed(c.WIPER, c.WIPER_MIDDLE, 500)
 
 
 def sort_poms():
