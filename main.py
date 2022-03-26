@@ -8,15 +8,6 @@ def main():
     act.init()
     act.leave_start_box()
     act.grab_botguy()
-    act.deliver_to_airlock()
-    # msleep(100)
-    # act.sort_poms()
-    # msleep(1000)
-    # act.cross_board()
-    # msleep(1000)
-    # act.elevator_up()
-    # msleep(1000)
-    # act.elevator_down()
     act.shut_down()
 
 

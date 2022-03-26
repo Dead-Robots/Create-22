@@ -1,5 +1,5 @@
 from kipr import create_connect_once, create_full, create_disconnect, msleep, enable_servo, disable_servo, \
-    enable_servo, push_button, get_servo_position
+    enable_servo, push_button, get_servo_position, disable_servos
 
 import constants as c
 from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot, drive_distance_straight, calibrate_gyro
@@ -14,12 +14,14 @@ def init():
         print("Is the create on?")
         exit()
     create_full()
-    enable_servo(c.WRIST)
     servo.move(c.WRIST, c.WRIST_START)
-    enable_servo(c.ELBOW)
-    servo.move(c.ELBOW, c.ELBOW_START)
-    enable_servo(c.WIPER)
-    servo.move(c.WIPER, c.WIPER_MIDDLE)
+    enable_servo(c.WRIST)
+    servo.move(c.ARM, c.ARM_START)
+    enable_servo(c.ARM)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
+    enable_servo(c.LEFT_WIPER)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
+    enable_servo(c.RIGHT_WIPER)
     calibrate_gyro()
     print("push button to continue")
     while not push_button():
@@ -34,28 +36,20 @@ def debug():
     exit(0)
 
 
-# def some_action():
-# drive_distance_straight(30, 36)
-
-
 def leave_start_box():
-    servo.move(c.WIPER, c.WIPER_LEFT_CRUNCH)
-    servo.move(c.ELBOW, c.ELBOW_HOVER)
-    servo.move(c.WRIST, c.WRIST_DRIVE)
+    servo.move(c.ARM, c.ARM_BOTGUY)
+    servo.move(c.WRIST, c.WRIST_BOTGUY)
     drive_distance_straight(50, 50)
 
 
 def grab_botguy():
-    # servo.move_timed(c.ELBOW, 1200, 1000)
-    servo.move(c.ELBOW, c.ELBOW_GRAB_BOTGUY)
-    servo.move(c.WRIST, c.WRIST_GRAB_BOTGUY)
-    spin(-50, 900)
-    drive_distance_straight(50, 15)
-    # servo.move_timed(c.WIPER, 1600, 500)
-    drive_distance_straight(25, 11)
-    # servo.move_timed(c.WIPER, c.WIPER_LEFT, 500)
+    spin(-50, 810)
+    drive_distance_straight(50, 25)
+    drive_distance_straight(25, 5)
+    spin(-50, 400)
 
 
+'''
 def deliver_to_airlock():
     drive_distance_straight(-50, 30)
     spin(50, 900)
@@ -160,10 +154,11 @@ def POST():
     servo.move(c.WRIST, c.WRIST_START)
     msleep(1000)
     servo.move(c.ELBOW, c.ELBOW_START)
+'''
 
 
 def shut_down():
     print("shutting down")
     create_disconnect()
-    disable_servo()
-    print("Shut down")
+    disable_servos()
+    print("shut down")

@@ -8,32 +8,27 @@ if IS_PRIME:
     ADJUST_SPEED = 0.93
 
     # Servo Ports
-    WRIST = 0
-    WIPER = 1
-    ELBOW = 2
+    ARM = 0
+    WRIST = 1
+    LEFT_WIPER = 2
+    RIGHT_WIPER = 3
 
     # Motor Ports
-    ELEVATOR = 0
 
     # Servo Positions
-    WIPER_LEFT = 100
-    WIPER_MIDDLE = 1000
-    WIPER_RIGHT = 1900
-    WIPER_LEFT_CRUNCH = 0
-    WIPER_RIGHT_CRUNCH = 2000
+    ARM_START = 600
+    ARM_BOTGUY = 2047
 
-    WRIST_DELIVER = 706
-    WRIST_START = 1550
-    WRIST_LIFT = 2047
-    WRIST_GRAB_BOTGUY = 215
-    WRIST_DRIVE = 2000
+    WRIST_START = 2047
+    WRIST_BOTGUY = 300
 
-    ELBOW_DELIVER = 1650
-    ELBOW_START = 330
-    ELBOW_HOVER = 400
-    ELBOW_GRAB_BOTGUY = 2048
+    LEFT_WIPER_CLOSED = 800
+    LEFT_WIPER_CENTER = 1250
+    LEFT_WIPER_OPEN = 1600
 
-
+    RIGHT_WIPER_CLOSED = 550
+    RIGHT_WIPER_CENTER = 250
+    RIGHT_WIPER_OPEN = 0
 
 
 elif IS_CLONE:
@@ -42,23 +37,12 @@ elif IS_CLONE:
     ADJUST_SPEED = 0.95  # Factor for left motor
 
     # Servo Ports
-    WRIST = 0
-    WIPER = 1
-    ELBOW = 2
+    ELBOW = 1
+    ARM = 2
 
     # Motor Ports
-    ELEVATOR = 0
 
     # Servo Positions
-    WIPER_LEFT = 500
-    WIPER_MIDDLE = 1000
-    WIPER_RIGHT = 1500
-
-    WRIST_DELIVER = 0
-    WRIST_START = 1550
-
-    ELBOW_DELIVER = 1600
-    ELBOW_START = 325
 
 
 else:
