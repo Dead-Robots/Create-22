@@ -2,7 +2,8 @@ from kipr import create_connect_once, create_full, create_disconnect, msleep, en
     enable_servo, push_button, get_servo_position, disable_servos
 
 import constants as c
-from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot, drive_distance_straight, calibrate_gyro
+from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot, drive_distance_straight, calibrate_gyro, \
+    drive_distance_straight_2
 import motors
 import servo
 
@@ -16,7 +17,7 @@ def init():
     create_full()
     servo.move(c.WRIST, c.WRIST_START)
     enable_servo(c.WRIST)
-    servo.move(c.ARM, c.ARM_START)
+    servo.move(c.ARM, c.ARM_START + 200)
     enable_servo(c.ARM)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
     enable_servo(c.LEFT_WIPER)
@@ -38,15 +39,28 @@ def debug():
 
 def leave_start_box():
     servo.move(c.ARM, c.ARM_BOTGUY)
-    servo.move(c.WRIST, c.WRIST_BOTGUY)
-    drive_distance_straight(50, 50)
+    servo.move(c.WRIST, c.WRIST_UP)
+    # drive_distance_straight(30, 4)
+    # spin(50, 1540)
+    # print("push button to continue")
+    # while not push_button():
+    #     pass
+    # drive_distance_straight(30, 5)
+    drive_distance_straight(-50, 50)
+    print("push button to continue")
+    while not push_button():
+        pass
 
 
 def grab_botguy():
-    spin(-50, 810)
-    drive_distance_straight(50, 25)
-    drive_distance_straight(25, 5)
-    spin(-50, 400)
+    spin(50, 780)
+    drive_distance_straight(50, 31)
+    drive_distance_straight(-25, 5)
+    print("push button to continue")
+    while not push_button():
+        pass
+    servo.move(c.WRIST, c.WRIST_BOTGUY)
+    spin(-25, 1200)
 
 
 '''

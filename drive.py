@@ -38,11 +38,13 @@ def calibrated_gyro_z():
     return gyro_z() - GYRO_OFFSET
 
 
-def drive_distance_straight(speed: int, distance: int):
-    end_time = time() + abs(int(distance * 25.4 / speed / 5))
+def drive_distance_straight(speed: int, distance):
+    end_time = time() + abs(distance * 25.4 / speed / 5)
+    print("drive time: ", abs(distance * 25.4 / speed / 5))
     r_speed = l_speed = speed
+
     while time() < end_time:
-        msleep(100)
+        msleep(10)
         drive(l_speed, r_speed)
         if calibrated_gyro_z() > 10:
             r_speed += 1
@@ -50,6 +52,46 @@ def drive_distance_straight(speed: int, distance: int):
         elif calibrated_gyro_z() < -10:
             l_speed += 1
             r_speed -= 1
+        else:
+            r_speed = l_speed = speed
+    stop()
+
+    def drive_distance_straight(speed: int, distance):
+        end_time = time() + abs(distance * 25.4 / speed / 5)
+        print("drive time: ", abs(distance * 25.4 / speed / 5))
+        r_speed = l_speed = speed
+
+        while time() < end_time:
+            msleep(10)
+            drive(l_speed, r_speed)
+            if calibrated_gyro_z() > 10:
+                r_speed += 1
+                l_speed -= 1
+            elif calibrated_gyro_z() < -10:
+                l_speed += 1
+                r_speed -= 1
+            else:
+                r_speed = l_speed = speed
+        stop()
+
+
+def drive_distance_straight_2(speed: int, distance):
+    end_time = time() + abs(distance * 25.4 / speed / 5)
+    print("drive time: ", abs(distance * 25.4 / speed / 5))
+    r_speed = l_speed = speed
+    tot_offset = 0
+    while time() < end_time:
+        tot_offset += calibrated_gyro_z()
+        drive(l_speed, r_speed)
+        if tot_offset > 10:
+            r_speed += 1
+            l_speed -= 1
+        elif tot_offset < -10:
+            l_speed += 1
+            r_speed -= 1
+        else:
+            r_speed = l_speed = speed
+        msleep(10)
     stop()
 
 
