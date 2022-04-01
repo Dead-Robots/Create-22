@@ -10,7 +10,7 @@ GYRO_OFFSET = 0
 
 def drive(l_speed: int, r_speed: int):
     """Drives left and right motor for values between -100 to 100"""
-    create_drive_direct(int((r_speed * -5) * c.ADJUST_SPEED), l_speed * -5)
+    create_drive_direct(r_speed * -5, (int(l_speed * -5 * c.ADJUST_SPEED)))
 
 
 def stop():
@@ -47,32 +47,14 @@ def drive_distance_straight(speed: int, distance):
         msleep(10)
         drive(l_speed, r_speed)
         if calibrated_gyro_z() > 10:
-            r_speed += 1
+            r_speed += 3
             l_speed -= 1
         elif calibrated_gyro_z() < -10:
+            r_speed -= 3
             l_speed += 1
-            r_speed -= 1
         else:
             r_speed = l_speed = speed
     stop()
-
-    def drive_distance_straight(speed: int, distance):
-        end_time = time() + abs(distance * 25.4 / speed / 5)
-        print("drive time: ", abs(distance * 25.4 / speed / 5))
-        r_speed = l_speed = speed
-
-        while time() < end_time:
-            msleep(10)
-            drive(l_speed, r_speed)
-            if calibrated_gyro_z() > 10:
-                r_speed += 1
-                l_speed -= 1
-            elif calibrated_gyro_z() < -10:
-                l_speed += 1
-                r_speed -= 1
-            else:
-                r_speed = l_speed = speed
-        stop()
 
 
 def drive_distance_straight_2(speed: int, distance):
@@ -111,3 +93,6 @@ def spin(speed, drive_time):
     drive(speed, -speed)
     msleep(drive_time)
     stop()
+
+
+# def drive_timed_straight_with_accelerat(speed,):

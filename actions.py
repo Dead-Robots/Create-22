@@ -46,21 +46,30 @@ def leave_start_box():
     # while not push_button():
     #     pass
     # drive_distance_straight(30, 5)
-    drive_distance_straight(-50, 50)
-    print("push button to continue")
-    while not push_button():
-        pass
+    # drive_distance_straight(-50, 50)
+    # drive_timed(-20, -25, 1000)
+    drive_timed(-70, -70, 3500)
+    # print("push button to continue")
+    # while not push_button():
+    #     pass
+    # drive_timed(20, 25, 1000)
+    # drive_timed(70, 70, 3500)
+    # print("push button to continue")
+    # while not push_button():
+    #     pass
 
 
 def grab_botguy():
     spin(50, 780)
-    drive_distance_straight(50, 31)
-    drive_distance_straight(-25, 5)
-    print("push button to continue")
-    while not push_button():
-        pass
+    drive_timed(70, 70, 1800)
+    drive_timed(-25, -25, 800)
+    spin(50, 200)
+    # print("push button to continue")
+    # while not push_button():
+    #     pass
     servo.move(c.WRIST, c.WRIST_BOTGUY)
-    spin(-25, 1200)
+    spin(-25, 1500)
+    debug()
 
 
 '''

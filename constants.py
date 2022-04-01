@@ -5,7 +5,7 @@ IS_CLONE = not IS_PRIME
 if IS_PRIME:
     print("I am prime")
 
-    ADJUST_SPEED = 0.93
+    ADJUST_SPEED = 0.94
 
     # Servo Ports
     ARM = 0
@@ -35,7 +35,7 @@ if IS_PRIME:
 elif IS_CLONE:
     print("I am clone")
 
-    ADJUST_SPEED = 0.95  # Factor for left motor
+    ADJUST_SPEED = 1.0  # Factor for left motor
 
     # Servo Ports
     ELBOW = 1
