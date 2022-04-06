@@ -4,13 +4,14 @@ this module provides drive functionality for create
 from kipr import *
 from time import time, sleep
 import constants as c
+from createserial.createCommands import create_dd
 
 GYRO_OFFSET = 0
 
 
 def drive(l_speed: int, r_speed: int):
     """Drives left and right motor for values between -100 to 100"""
-    create_drive_direct(r_speed * -5, (int(l_speed * -5 * c.ADJUST_SPEED)))
+    create_dd(r_speed * -5, (int(l_speed * -5 * c.ADJUST_SPEED)))
 
 
 def stop():

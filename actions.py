@@ -1,5 +1,5 @@
 from kipr import create_connect_once, create_full, create_disconnect, msleep, enable_servo, disable_servo, \
-    enable_servo, push_button, get_servo_position, disable_servos
+    enable_servo, push_button, get_servo_position, disable_servos, get_create_lcliff, get_create_rcliff
 
 import constants as c
 from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot, drive_distance_straight, calibrate_gyro, \
@@ -7,56 +7,75 @@ from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot, drive
 import motors
 import servo
 
+from createserial.createCommands import open_create, close_create
+from createserial.myserial import open_serial, close_serial
+
 
 def init():
     print("initing")
-    if not create_connect_once():
-        print("failed to connect")
-        print("Is the create on?")
-        exit()
-    create_full()
-    servo.move(c.WRIST, c.WRIST_START)
-    enable_servo(c.WRIST)
-    servo.move(c.ARM, c.ARM_START + 200)
+    # if not create_connect_once():
+    #     print("failed to connect")
+    #     print("Is the create on?")
+    #     exit()
+    # create_full()
+
+    # Open a serial port connection to the Create
+    open_serial()
+    # Initialize the Create
+    open_create()
+
+    calibrate_gyro()
+
+    servo.move(c.ARM, c.ARM_INIT)
     enable_servo(c.ARM)
+    servo.move(c.WRIST, c.WRIST_INIT)
+    enable_servo(c.WRIST)
+
+    wait_for_button()
+
+    servo.move(c.ARM, c.ARM_BOTGUY)
+    servo.move(c.WRIST, c.WRIST_UP)
+
+    spin(50, 1550)
+
+    drive_timed(25, 25, 1500)
+
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
     enable_servo(c.LEFT_WIPER)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
     enable_servo(c.RIGHT_WIPER)
-    calibrate_gyro()
-    print("push button to continue")
     while not push_button():
-        pass
+        read_cliff_sensors()
+        msleep(500)
+
     # POST()
 
 
 def debug():
     stop()
     msleep(1000)
+
+    # Terminate communications with the Create
+    close_create()
+
+    # Close serial port connection to the Create
+    close_serial()
+
     print("exited")
     exit(0)
+
+
+def wait_for_button():
+    print("push button to continue")
+    while not push_button():
+        pass
 
 
 def leave_start_box():
     servo.move(c.ARM, c.ARM_BOTGUY)
     servo.move(c.WRIST, c.WRIST_UP)
-    # drive_distance_straight(30, 4)
-    # spin(50, 1540)
-    # print("push button to continue")
-    # while not push_button():
-    #     pass
-    # drive_distance_straight(30, 5)
-    # drive_distance_straight(-50, 50)
-    # drive_timed(-20, -25, 1000)
-    drive_timed(-70, -70, 3500)
-    # print("push button to continue")
-    # while not push_button():
-    #     pass
-    # drive_timed(20, 25, 1000)
-    # drive_timed(70, 70, 3500)
-    # print("push button to continue")
-    # while not push_button():
-    #     pass
+    wait_for_button()
+    drive_timed(-70, -70, 3700)
 
 
 def grab_botguy():
@@ -64,13 +83,25 @@ def grab_botguy():
     drive_timed(70, 70, 1800)
     drive_timed(-25, -25, 800)
     spin(50, 200)
-    # print("push button to continue")
-    # while not push_button():
-    #     pass
+
+    wait_for_button()
+
     servo.move(c.WRIST, c.WRIST_BOTGUY)
     spin(-25, 1500)
-    debug()
 
+
+def read_cliff_sensors():
+    print("Left:", get_create_lcliff(), "; Right: ", get_create_rcliff())
+
+
+def drive_to_poms():
+
+    spin(50, 775)   # 90 degrees?
+
+
+def collect_poms():
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
 
 '''
 def deliver_to_airlock():
@@ -184,4 +215,9 @@ def shut_down():
     print("shutting down")
     create_disconnect()
     disable_servos()
+    # Terminate communications with the Create
+    close_create()
+
+    # Close serial port connection to the Create
+    close_serial()
     print("shut down")
