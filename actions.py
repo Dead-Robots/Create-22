@@ -1,11 +1,9 @@
-from kipr import create_connect_once, create_full, create_disconnect, msleep, enable_servo, disable_servo, \
-    enable_servo, push_button, get_servo_position, disable_servos, get_create_lcliff, get_create_rcliff
+from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos
 
 import constants as c
-from drive import drive, drive_timed, stop, spin, left_pivot, right_pivot, drive_distance_straight, calibrate_gyro, \
-    drive_distance_straight_2
-import motors
+from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight
 import servo
+from sensors import read_cliffs
 
 from createserial.createCommands import open_create, close_create
 from createserial.myserial import open_serial, close_serial
@@ -26,10 +24,11 @@ def init():
 
     calibrate_gyro()
 
-    servo.move(c.ARM, c.ARM_INIT)
     enable_servo(c.ARM)
-    servo.move(c.WRIST, c.WRIST_INIT)
+    servo.move(c.ARM, c.ARM_INIT)
+
     enable_servo(c.WRIST)
+    servo.move(c.WRIST, c.WRIST_INIT)
 
     wait_for_button()
 
@@ -37,17 +36,21 @@ def init():
     servo.move(c.WRIST, c.WRIST_UP)
 
     spin(50, 1550)
-
     drive_timed(25, 25, 1500)
+    stop()
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
     enable_servo(c.LEFT_WIPER)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
     enable_servo(c.RIGHT_WIPER)
-    while not push_button():
-        read_cliff_sensors()
-        msleep(500)
 
+    # while not push_button():
+    #     read_cliffs()
+    #     msleep(500)
+
+    wait_for_button()
+    drive_straight(50, 75)
+    debug()
     # POST()
 
 
@@ -78,6 +81,7 @@ def leave_start_box():
     drive_timed(-70, -70, 3700)
 
 
+
 def grab_botguy():
     spin(50, 780)
     drive_timed(70, 70, 1800)
@@ -90,12 +94,7 @@ def grab_botguy():
     spin(-25, 1500)
 
 
-def read_cliff_sensors():
-    print("Left:", get_create_lcliff(), "; Right: ", get_create_rcliff())
-
-
 def drive_to_poms():
-
     spin(50, 775)   # 90 degrees?
 
 

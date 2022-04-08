@@ -1,10 +1,12 @@
 """
 this module provides drive functionality for create
 """
+import math
 from kipr import *
 from time import time, sleep
 import constants as c
-from createserial.createCommands import create_dd
+from createserial.createCommands import create_dd, Encoders
+from sensors import read_cliffs
 
 GYRO_OFFSET = 0
 
@@ -16,7 +18,7 @@ def drive(l_speed: int, r_speed: int):
 
 def stop():
     """Stops robot"""
-    create_stop()
+    drive(0, 0)
 
 
 def drive_timed(l_speed: int, r_speed: int, drive_time: int):
@@ -96,4 +98,31 @@ def spin(speed, drive_time):
     stop()
 
 
-# def drive_timed_straight_with_accelerat(speed,):
+def drive_until_black(speed):
+    drive(speed, speed)
+    rCliff, lCliff = read_cliffs()
+    while rCliff > 1000 and lCliff > 1000:
+        rCliff, lCliff = read_cliffs()
+    drive(0, 0)
+
+
+# encoder values to inches: n * (math.pi * 72 / 508.8) / 24.5
+
+def drive_straight(distance, speed):
+    encoders = Encoders()
+    left, right = encoders.values
+    r_speed = l_speed = speed*5
+    create_dd(l_speed, r_speed)
+    inches = right * (math.pi * 72 / 508.8) / 24.5
+    while abs(inches) < abs(distance):
+        left, right = encoders.values
+        inches = 0.5*((right * (math.pi * 72 / 508.8) / 24.5) + (left * (math.pi * 72 / 508.8) / 24.5))
+        if abs(right) > abs(left):
+            r_speed -= 1 if speed > 0 else -1
+            l_speed += 1 if speed > 0 else -1
+        if abs(left) > abs(right):
+            l_speed -= 1 if speed > 0 else -1
+            r_speed += 1 if speed > 0 else -1
+        create_dd(l_speed, r_speed)
+        print(right, left, inches)
+    drive(0, 0)
