@@ -17,27 +17,25 @@ def init():
     #     exit()
     # create_full()
 
-    # Open a serial port connection to the Create
-    open_serial()
-    # Initialize the Create
-    open_create()
-
+    open_serial()  # Open a serial port connection to the Create
+    open_create()  # Initialize the Create
     calibrate_gyro()
 
     enable_servo(c.ARM)
-    servo.move(c.ARM, c.ARM_INIT)
-
+    # servo.move(c.ARM, c.ARM_INIT)
     enable_servo(c.WRIST)
-    servo.move(c.WRIST, c.WRIST_INIT)
+    # servo.move(c.WRIST, c.WRIST_INIT)
 
-    wait_for_button()
+    # wait_for_button()
 
     servo.move(c.ARM, c.ARM_BOTGUY)
     servo.move(c.WRIST, c.WRIST_UP)
 
-    spin(50, 1550)
-    drive_timed(25, 25, 1500)
-    stop()
+    drive_straight(36, 30)
+    debug()
+    # spin(50, 1550)
+    # drive_timed(25, 25, 1500)
+    # stop()
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
     enable_servo(c.LEFT_WIPER)
@@ -48,9 +46,9 @@ def init():
     #     read_cliffs()
     #     msleep(500)
 
-    wait_for_button()
-    drive_straight(50, 75)
-    debug()
+    # wait_for_button()
+    # drive_straight(50, 75)
+    # debug()
     # POST()
 
 
@@ -81,7 +79,6 @@ def leave_start_box():
     drive_timed(-70, -70, 3700)
 
 
-
 def grab_botguy():
     spin(50, 780)
     drive_timed(70, 70, 1800)
@@ -95,12 +92,25 @@ def grab_botguy():
 
 
 def drive_to_poms():
-    spin(50, 775)   # 90 degrees?
+    spin(50, 775)  # 90 degrees?
 
 
 def collect_poms():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
+
+
+def shut_down():
+    print("shutting down")
+    create_disconnect()
+    disable_servos()
+    # Terminate communications with the Create
+    close_create()
+
+    # Close serial port connection to the Create
+    close_serial()
+    print("shut down")
+
 
 '''
 def deliver_to_airlock():
@@ -208,15 +218,3 @@ def POST():
     msleep(1000)
     servo.move(c.ELBOW, c.ELBOW_START)
 '''
-
-
-def shut_down():
-    print("shutting down")
-    create_disconnect()
-    disable_servos()
-    # Terminate communications with the Create
-    close_create()
-
-    # Close serial port connection to the Create
-    close_serial()
-    print("shut down")

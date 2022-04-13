@@ -106,23 +106,27 @@ def drive_until_black(speed):
     drive(0, 0)
 
 
-# encoder values to inches: n * (math.pi * 72 / 508.8) / 24.5
+# encoder values to inches: n * (math.pi * 72 / 508.8) / 24.5 where n equals encoder values
 
 def drive_straight(distance, speed):
+    p = 0.25
+    i = 0.05
     encoders = Encoders()
     left, right = encoders.values
-    r_speed = l_speed = speed*5
+    old_left, old_right = left, right
+    r_speed = l_speed = speed * 5
+    inches = 0
     create_dd(l_speed, r_speed)
-    inches = right * (math.pi * 72 / 508.8) / 24.5
     while abs(inches) < abs(distance):
+        msleep(15)
         left, right = encoders.values
-        inches = 0.5*((right * (math.pi * 72 / 508.8) / 24.5) + (left * (math.pi * 72 / 508.8) / 24.5))
-        if abs(right) > abs(left):
-            r_speed -= 1 if speed > 0 else -1
-            l_speed += 1 if speed > 0 else -1
-        if abs(left) > abs(right):
-            l_speed -= 1 if speed > 0 else -1
-            r_speed += 1 if speed > 0 else -1
+        inches = 0.5 * ((right * (math.pi * 72 / 508.8) / 24.5) + (left * (math.pi * 72 / 508.8) / 24.5))
+        p_error = (right - old_right) - (left - old_left)  # short term
+        i_error = right - left  # long term
+        r_speed -= int(p * p_error + i * i_error)
+        l_speed += int(p * p_error + i * i_error)
         create_dd(l_speed, r_speed)
-        print(right, left, inches)
+        old_left = left
+        old_right = right
+        print("in loop", left, right, inches, l_speed, r_speed)
     drive(0, 0)
