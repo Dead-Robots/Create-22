@@ -1,7 +1,7 @@
 from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos
 
 import constants as c
-from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight
+from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight ,pivot
 import servo
 from sensors import read_cliffs
 
@@ -25,22 +25,30 @@ def init():
     # servo.move(c.ARM, c.ARM_INIT)
     enable_servo(c.WRIST)
     # servo.move(c.WRIST, c.WRIST_INIT)
+    enable_servo(c.RIGHT_WIPER)
+    enable_servo(c.LEFT_WIPER)
 
     # wait_for_button()
 
     servo.move(c.ARM, c.ARM_BOTGUY)
     servo.move(c.WRIST, c.WRIST_UP)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
-    drive_straight(36, 30)
+    spin(20, 180)
     debug()
+    drive_straight(2, -40)
+
+
+    # debug()
     # spin(50, 1550)
     # drive_timed(25, 25, 1500)
     # stop()
 
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
-    enable_servo(c.LEFT_WIPER)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
-    enable_servo(c.RIGHT_WIPER)
+    # servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
+    # enable_servo(c.LEFT_WIPER)
+    # servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
+    # enable_servo(c.RIGHT_WIPER)
 
     # while not push_button():
     #     read_cliffs()
@@ -73,22 +81,31 @@ def wait_for_button():
 
 
 def leave_start_box():
-    servo.move(c.ARM, c.ARM_BOTGUY)
-    servo.move(c.WRIST, c.WRIST_UP)
-    wait_for_button()
-    drive_timed(-70, -70, 3700)
+    msleep(250)
+    drive_straight(56, 40)
+    spin(-50, 80)
+    drive_straight(6, -40)
+    spin(35, 80)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+    servo.move(c.WRIST, c.WRIST_POM)
+    servo.move(c.ARM, c.ARM_DOWN)
 
 
 def grab_botguy():
-    spin(50, 780)
-    drive_timed(70, 70, 1800)
-    drive_timed(-25, -25, 800)
-    spin(50, 200)
-
-    wait_for_button()
-
+    msleep(250)
+    drive_straight(54, 40)
+    spin(-50, 80)
+    drive_straight(25, -40)
+    msleep(250)
+    drive_straight(4, 30)
+    spin(15, 50)
+    drive_straight(4, -30)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
+    debug()
     servo.move(c.WRIST, c.WRIST_BOTGUY)
-    spin(-25, 1500)
+    spin(-25, 15)
 
 
 def drive_to_poms():
@@ -96,8 +113,32 @@ def drive_to_poms():
 
 
 def collect_poms():
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
+    drive_straight(2, -25)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+    spin(-15, 3)
+    drive_straight(5, -25)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+    drive_straight(5.5, -25)
+    wait_for_button()
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+    drive_straight(5.5, -25)
+    wait_for_button()
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+    drive_straight(5.5, -25)
+
+    debug()
+
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+    drive_straight(5.5, -25)
+    wait_for_button()
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+    drive_straight(5.5, -25)
 
 
 def shut_down():

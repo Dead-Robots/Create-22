@@ -92,10 +92,38 @@ def right_pivot(speed, drive_time):
     stop()
 
 
-def spin(speed, drive_time):
-    drive(speed, -speed)
-    msleep(drive_time)
-    stop()
+def pivot(speed, angle, stationary_wheel):
+    arc_length = 2 * (angle * 9.25 * math.pi) / 360
+    encoders = Encoders()
+    left, right = encoders.values
+    r_speed = l_speed = speed * 5
+    inches = 0
+    while abs(inches) < abs(arc_length):
+        msleep(15)
+        left, right = encoders.values
+        if stationary_wheel == "left":
+            inches = (right * (math.pi * 72 / 508.8) / 24.5)
+            create_dd(0, r_speed)
+        else:
+            inches = (left * (math.pi * 72 / 508.8) / 24.5)
+            create_dd(l_speed, 0)
+        print("in loop", left, right, inches, l_speed, r_speed, arc_length)
+    drive(0, 0)
+
+
+def spin(speed, angle):
+    arc_length = (angle * 9 * math.pi) / 360
+    encoders = Encoders()
+    left, right = encoders.values
+    r_speed = l_speed = speed * 5
+    inches = 0
+    while abs(inches) < abs(arc_length):
+        msleep(15)
+        left, right = encoders.values
+        inches = abs(right) * ((math.pi * 72 / 508.8) / 24.5) # + (abs(left) * (math.pi * 72 / 508.8) / 24.5)
+        create_dd(-l_speed, r_speed)
+        print("in loop", left, right, inches, l_speed, r_speed, arc_length)
+    drive(0, 0)
 
 
 def drive_until_black(speed):

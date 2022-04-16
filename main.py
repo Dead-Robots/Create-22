@@ -6,9 +6,10 @@ import actions as a
 
 def main():
     a.init()
-    # a.leave_start_box()
     # a.grab_botguy()
-    #a.shut_down()
+    # a.leave_start_box()
+    # a.collect_poms()
+    # a.shut_down()
 
 
 if __name__ == '__main__':
