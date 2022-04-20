@@ -80,18 +80,6 @@ def drive_distance_straight_2(speed: int, distance):
     stop()
 
 
-def left_pivot(speed, drive_time):
-    drive(0, speed)
-    msleep(drive_time)
-    stop()
-
-
-def right_pivot(speed, drive_time):
-    drive(speed, 0)
-    msleep(drive_time)
-    stop()
-
-
 def pivot(speed, angle, stationary_wheel):
     arc_length = 2 * (angle * 9.25 * math.pi) / 360
     encoders = Encoders()
@@ -123,6 +111,14 @@ def spin(speed, angle):
         inches = abs(right) * ((math.pi * 72 / 508.8) / 24.5) # + (abs(left) * (math.pi * 72 / 508.8) / 24.5)
         create_dd(-l_speed, r_speed)
         print("in loop", left, right, inches, l_speed, r_speed, arc_length)
+    drive(0, 0)
+
+
+def spin_to_line(speed):
+    r_speed = l_speed = speed * 5
+    while analog_et(0) < 2000:
+        msleep(15)
+        create_dd(-l_speed, r_speed)
     drive(0, 0)
 
 
