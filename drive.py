@@ -5,7 +5,8 @@ import math
 from kipr import *
 from time import time, sleep
 import constants as c
-from createserial.createCommands import create_dd, Encoders
+from createserial.commands import create_dd
+from createserial.encoders import Encoders
 from sensors import read_cliffs
 
 GYRO_OFFSET = 0
@@ -95,7 +96,7 @@ def pivot(speed, angle, stationary_wheel):
         else:
             inches = (left * (math.pi * 72 / 508.8) / 24.5)
             create_dd(l_speed, 0)
-        print("in loop", left, right, inches, l_speed, r_speed, arc_length)
+        # print("in loop", left, right, inches, l_speed, r_speed, arc_length)
     drive(0, 0)
 
 
@@ -110,22 +111,23 @@ def spin(speed, angle):
         left, right = encoders.values
         inches = abs(right) * ((math.pi * 72 / 508.8) / 24.5) # + (abs(left) * (math.pi * 72 / 508.8) / 24.5)
         create_dd(-l_speed, r_speed)
-        print("in loop", left, right, inches, l_speed, r_speed, arc_length)
+        # print("in loop", left, right, inches, l_speed, r_speed, arc_length)
     drive(0, 0)
 
 
 def spin_to_line(speed):
     r_speed = l_speed = speed * 5
-    while analog_et(0) < 2000:
+    while analog_et(0) < 2800:
         msleep(15)
         create_dd(-l_speed, r_speed)
+        print(analog_et(0))
     drive(0, 0)
 
 
 def drive_until_black(speed):
     drive(speed, speed)
     rCliff, lCliff = read_cliffs()
-    while rCliff > 1000 and lCliff > 1000:
+    while rCliff > 1500 and lCliff > 1000:
         rCliff, lCliff = read_cliffs()
     drive(0, 0)
 
@@ -152,5 +154,5 @@ def drive_straight(distance, speed):
         create_dd(l_speed, r_speed)
         old_left = left
         old_right = right
-        print("in loop", left, right, inches, l_speed, r_speed)
+        # print("in loop", left, right, inches, l_speed, r_speed)
     drive(0, 0)

@@ -5,8 +5,8 @@ from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, dr
 import servo
 from sensors import read_cliffs
 
-from createserial.createCommands import open_create, close_create
-from createserial.myserial import open_serial, close_serial
+from createserial.commands import open_create, close_create
+from createserial.serial import open_serial, close_serial
 
 
 def init():
@@ -31,8 +31,8 @@ def init():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
-    spin(20, 180)
-    drive_straight(2, -40)
+    spin(30, 180)
+    drive_straight(4, -40)
 
 
 def debug():
@@ -77,46 +77,70 @@ def grab_botguy():
 
 
 def collect_poms():
-    spin(-50, 80)
-    drive_straight(6, -40)
+    spin(50, 87)
+    msleep(500)
+    drive_until_black(-50)
+    spin(-50, 76)
+
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
-    msleep(1000)
-    spin_to_line(35)
 
-    drive_straight(8, -25)
+    # msleep(1000)
+    # spin_to_line(35)
+
+    drive_straight(8.3, -25)
+    spin_to_line(5)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-    spin(-15, 3)
-    drive_straight(5.5, -25)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    spin(15, 2)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    drive_straight(5.5, -25)
 
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+    spin(-5, 5)
     drive_straight(5.5, -25)
-
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    drive_straight(5.5, -25)
 
+    spin_to_line(5)
+    drive_straight(5.5, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-    drive_straight(5.5, -25)
 
+    spin(-5, 5)
+    drive_straight(5.5, -25)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    drive_straight(5.5, -25)
 
+    spin_to_line(5)
+    drive_straight(5.5, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-    drive_straight(5.5, -25)
 
+    spin(-5, 5)
+    drive_straight(5.5, -25)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+
+    spin_to_line(5)
+    drive_straight(5.5, -25)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+
+    spin(-5, 5)
+    drive_straight(5, -25)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    drive_straight(0.75, 10)
+
+    servo.move(c.ARM, c.ARM_BOTGUY)
+
+
+def deliver_poms():
+    drive_straight(54, 60)
+    spin(40, 90)
+    drive_straight(14, -30)
+    servo.move(c.ARM, c.ARM_DELIVER, 15)
+    servo.move(c.WRIST, c.WRIST_DELIVER, 15)
+    drive_straight(3, 40)
+    spin(25, 45)
 
 
 def shut_down():

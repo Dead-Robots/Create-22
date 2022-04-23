@@ -1,4 +1,4 @@
-from createserial.createCommands import read_cliff_signals
+from createserial.commands import read_cliff_signals
 
 
 def read_cliffs():

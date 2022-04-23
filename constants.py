@@ -5,7 +5,7 @@ IS_CLONE = not IS_PRIME
 if IS_PRIME:
     print("I am prime")
 
-    ADJUST_SPEED = 0.93
+    ADJUST_SPEED = 1.07
 
     # Servo Ports
     ARM = 0
@@ -20,6 +20,7 @@ if IS_PRIME:
     ARM_START = 600
     ARM_BOTGUY = 2047
     ARM_DOWN = 400
+    ARM_DELIVER = 1720
 
 
     WRIST_INIT = 0
@@ -27,9 +28,10 @@ if IS_PRIME:
     WRIST_UP = 940
     WRIST_BOTGUY = 500
     WRIST_POM = 2020
+    WRIST_DELIVER = 770
 
 
-    LEFT_WIPER_CLOSED = 575
+    LEFT_WIPER_CLOSED = 400
     LEFT_WIPER_CENTER = 900
     LEFT_WIPER_OPEN = 1300
 

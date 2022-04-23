@@ -10,6 +10,7 @@ def main():
     # a.grab_botguy()
     a.leave_start_box()
     a.collect_poms()
+    a.deliver_poms()
     a.shut_down()
 
 
