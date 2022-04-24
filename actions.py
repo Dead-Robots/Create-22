@@ -26,13 +26,29 @@ def init():
     enable_servo(c.RIGHT_WIPER)
     enable_servo(c.LEFT_WIPER)
 
-    servo.move(c.ARM, c.ARM_BOTGUY)
-    servo.move(c.WRIST, c.WRIST_UP)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
-    spin(30, 180)
-    drive_straight(4, -40)
+    # servo.move(c.WRIST, c.WRIST_START)
+    # servo.move(c.ARM, c.ARM_BOTGUY)
+
+    servo.move(c.WRIST, c.WRIST_POM)
+    servo.move(c.ARM, c.ARM_DOWN)
+
+    wait_for_button()
+
+
+def collect_and_deliver_cubes():
+    drive_straight(1, -5)
+    msleep(250)
+
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CUBES)
+    servo.move(c.ARM, c.ARM_CUBES)
+    servo.move(c.WRIST, c.WRIST_CUBES)
+    spin(20, 70)
+
+    servo.move(c.ARM, 1000)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
 
 
 def debug():
@@ -56,6 +72,14 @@ def wait_for_button():
 
 
 def leave_start_box():
+    servo.move(c.ARM, c.ARM_BOTGUY)
+    servo.move(c.WRIST, c.WRIST_UP)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+
+    spin(30, 90)
+    drive_straight(4, -40)
+
     msleep(250)
     drive_straight(60, 60)
 
@@ -77,21 +101,19 @@ def grab_botguy():
 
 
 def collect_poms():
-    spin(50, 87)
+    spin(40, 87)
     msleep(500)
-    drive_until_black(-50)
-    spin(-50, 76)
+    drive_until_black(-30)
+    spin(-40, 83)
+    drive_straight(4, -10)
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
 
-    # msleep(1000)
-    # spin_to_line(35)
-
-    drive_straight(8.3, -25)
-    spin_to_line(5)
+    spin_to_line(3)
+    drive_straight(4, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
@@ -100,7 +122,17 @@ def collect_poms():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
-    spin_to_line(5)
+    spin_to_line(3)
+    drive_straight(5.5, -25)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+
+    spin(-5, 5.5)
+    drive_straight(5.5, -25)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+
+    spin_to_line(3)
     drive_straight(5.5, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
@@ -110,33 +142,43 @@ def collect_poms():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
-    spin_to_line(5)
+    spin_to_line(3)
     drive_straight(5.5, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
     spin(-5, 5)
-    drive_straight(5.5, -25)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-
-    spin_to_line(5)
-    drive_straight(5.5, -25)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-
-    spin(-5, 5)
-    drive_straight(5, -25)
+    drive_straight(4, -25)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     drive_straight(0.75, 10)
 
     servo.move(c.ARM, c.ARM_BOTGUY)
+    drive_straight(14, -25)
 
 
-def deliver_poms():
+def deliver_poms_to_transporter():
+    drive_straight(63, 60)
+
+    servo.move(c.ARM, c.ARM_DELIVER, 15)
+    servo.move(c.WRIST, c.WRIST_DELIVER, 15)
+
+    wait_for_button()
+    drive_until_black(-40)
+    wait_for_button()
+    spin(20, 90)
+    wait_for_button()
+
+    servo.move(c.ARM, c.ARM_CUBES - 150)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+
+
+def deliver_poms_to_airlock():
     drive_straight(54, 60)
     spin(40, 90)
-    drive_straight(14, -30)
+    drive_straight(17, -30)
     servo.move(c.ARM, c.ARM_DELIVER, 15)
     servo.move(c.WRIST, c.WRIST_DELIVER, 15)
     drive_straight(3, 40)

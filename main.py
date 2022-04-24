@@ -8,9 +8,14 @@ import drive as d
 def main():
     a.init()
     # a.grab_botguy()
+    # a.spin(-20, 180)
+    # a.wait_for_button()
+    # a.spin(-20, 90)
+    a.collect_and_deliver_cubes()
     a.leave_start_box()
     a.collect_poms()
-    a.deliver_poms()
+    a.deliver_poms_to_transporter()
+    # a.deliver_poms_to_airlock()
     a.shut_down()
 
 

@@ -117,7 +117,7 @@ def spin(speed, angle):
 
 def spin_to_line(speed):
     r_speed = l_speed = speed * 5
-    while analog_et(0) < 2800:
+    while analog_et(0) < 2000:
         msleep(15)
         create_dd(-l_speed, r_speed)
         print(analog_et(0))
@@ -125,7 +125,7 @@ def spin_to_line(speed):
 
 
 def drive_until_black(speed):
-    drive(speed, speed)
+    drive(int(speed * 0.85), speed)
     rCliff, lCliff = read_cliffs()
     while rCliff > 1500 and lCliff > 1000:
         rCliff, lCliff = read_cliffs()
