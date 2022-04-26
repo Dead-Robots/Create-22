@@ -1,7 +1,7 @@
 from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos
 
 import constants as c
-from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight ,pivot, spin_to_line
+from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight ,pivot, spin_to_black, spin_to_white
 import servo
 from sensors import read_cliffs
 
@@ -39,7 +39,7 @@ def init():
 
 
 def collect_and_deliver_cubes():
-    drive_straight(1, -5)
+    drive_straight(1.5, -5) # was 1 inch last time
     msleep(250)
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CUBES)
@@ -104,7 +104,7 @@ def collect_poms():
     spin(40, 87)
     msleep(500)
     drive_until_black(-30)
-    spin(-40, 83)
+    spin(-40, 98) # was 83
     drive_straight(4, -10)
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
@@ -112,56 +112,73 @@ def collect_poms():
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
 
-    spin_to_line(3)
+    spin_to_black(3)
     drive_straight(4, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
-    spin(-5, 5)
+    spin_to_white(-3)
     drive_straight(5.5, -25)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
-    spin_to_line(3)
+    spin_to_black(3)
     drive_straight(5.5, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
-    spin(-5, 5.5)
+    spin_to_white(-3)
     drive_straight(5.5, -25)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
-    spin_to_line(3)
+    spin_to_black(3)
     drive_straight(5.5, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
-    spin(-5, 5)
+    spin_to_white(-3) # used to be spin(-5, 7), 3rd green pom, longer now
     drive_straight(5.5, -25)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
-    spin_to_line(3)
+    spin_to_black(3)
     drive_straight(5.5, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
-    spin(-5, 5)
+    spin_to_white(-3)
     drive_straight(4, -25)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     drive_straight(0.75, 10)
 
     servo.move(c.ARM, c.ARM_BOTGUY)
+    spin(-20, 5)
     drive_straight(14, -25)
 
 
 def deliver_poms_to_transporter():
-    drive_straight(63, 60)
+    drive_straight(69, 60)
+    spin(-50, 160)
+    msleep(500)
+    drive_straight(7, -20)
+    msleep(500)
 
-    servo.move(c.ARM, c.ARM_DELIVER, 15)
-    servo.move(c.WRIST, c.WRIST_DELIVER, 15)
+    drive_straight(4, 10)
+    #spin(40, 2)
+    servo.move(c.ARM, c.ARM_DELIVER_LOW, 15)
+    servo.move(c.WRIST, c.WRIST_DELIVER_LOW, 15)
+    msleep(250)
 
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+
+    debug()
+
+    wait_for_button()
+    servo.move(c.ARM, c.ARM_DELIVER_LOW)
     wait_for_button()
     drive_until_black(-40)
     wait_for_button()
@@ -179,8 +196,8 @@ def deliver_poms_to_airlock():
     drive_straight(54, 60)
     spin(40, 90)
     drive_straight(17, -30)
-    servo.move(c.ARM, c.ARM_DELIVER, 15)
-    servo.move(c.WRIST, c.WRIST_DELIVER, 15)
+    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
+    servo.move(c.WRIST, c.WRIST_DELIVER_HIGH, 15)
     drive_straight(3, 40)
     spin(25, 45)
 

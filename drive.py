@@ -115,7 +115,7 @@ def spin(speed, angle):
     drive(0, 0)
 
 
-def spin_to_line(speed):
+def spin_to_black(speed):
     r_speed = l_speed = speed * 5
     while analog_et(0) < 2000:
         msleep(15)
@@ -123,6 +123,14 @@ def spin_to_line(speed):
         print(analog_et(0))
     drive(0, 0)
 
+
+def spin_to_white(speed):
+    r_speed = l_speed = speed * 5
+    while analog_et(0) > 2000:
+        msleep(15)
+        create_dd(-l_speed, r_speed)
+        print(analog_et(0))
+    drive(0, 0)
 
 def drive_until_black(speed):
     drive(int(speed * 0.85), speed)
