@@ -29,17 +29,14 @@ def init():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
-    # servo.move(c.WRIST, c.WRIST_START)
-    # servo.move(c.ARM, c.ARM_BOTGUY)
-
     servo.move(c.WRIST, c.WRIST_POM)
-    servo.move(c.ARM, c.ARM_DOWN)
+    servo.move(c.ARM, c.ARM_DOWN - 100)
 
     wait_for_button()
 
 
 def collect_and_deliver_cubes():
-    drive_straight(1.5, -5) # was 1 inch last time
+    drive_straight(1.25, -5) # was 1 inch last time
     msleep(250)
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CUBES)
@@ -105,7 +102,7 @@ def collect_poms():
     msleep(500)
     drive_until_black(-30)
     spin(-40, 98) # was 83
-    drive_straight(4, -10)
+    drive_straight(3, -10)
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
@@ -113,7 +110,7 @@ def collect_poms():
     servo.move(c.ARM, c.ARM_DOWN)
 
     spin_to_black(3)
-    drive_straight(4, -25)
+    drive_straight(3, -25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
@@ -148,13 +145,13 @@ def collect_poms():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
     spin_to_white(-3)
-    drive_straight(4, -25)
+    drive_straight(4.5, -25)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     drive_straight(0.75, 10)
 
     servo.move(c.ARM, c.ARM_BOTGUY)
     spin(-20, 5)
-    drive_straight(14, -25)
+    drive_straight(16, -25)
 
 
 def deliver_poms_to_transporter():
@@ -165,10 +162,12 @@ def deliver_poms_to_transporter():
     msleep(500)
 
     drive_straight(4, 10)
-    #spin(40, 2)
+    # spin(40, 2)
     servo.move(c.ARM, c.ARM_DELIVER_LOW, 15)
     servo.move(c.WRIST, c.WRIST_DELIVER_LOW, 15)
     msleep(250)
+
+    # spin(20, 1)
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)

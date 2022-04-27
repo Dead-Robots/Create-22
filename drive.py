@@ -120,7 +120,7 @@ def spin_to_black(speed):
     while analog_et(0) < 2000:
         msleep(15)
         create_dd(-l_speed, r_speed)
-        print(analog_et(0))
+        # print(analog_et(0))
     drive(0, 0)
 
 
@@ -129,8 +129,9 @@ def spin_to_white(speed):
     while analog_et(0) > 2000:
         msleep(15)
         create_dd(-l_speed, r_speed)
-        print(analog_et(0))
+        # print(analog_et(0))
     drive(0, 0)
+
 
 def drive_until_black(speed):
     drive(int(speed * 0.85), speed)
