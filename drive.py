@@ -29,6 +29,13 @@ def drive_timed(l_speed: int, r_speed: int, drive_time: int):
     stop()
 
 
+def drive_distance_default(speed:int, distance: int):
+    converted = (speed*5)/25.4  # mm/sec to in/sec
+    ms = int((distance / converted) * 1000)
+    print("converted: ", converted, "ms: ", ms)
+    drive_timed(speed, speed, ms)
+
+
 def calibrate_gyro():
     global GYRO_OFFSET
     total = 0
@@ -144,23 +151,27 @@ def drive_until_black(speed):
 # encoder values to inches: n * (math.pi * 72 / 508.8) / 24.5 where n equals encoder values
 
 def drive_straight(distance, speed):
-    p = 0.25
-    i = 0.05
+    p = 0.30  # was p = 0.25
+    i = 0.05  # was i = 0.05
     encoders = Encoders()
-    left, right = encoders.values
+    right, left = encoders.values
+    right = -1 * right
+    left = -1 * left
     old_left, old_right = left, right
-    r_speed = l_speed = speed * 5
+    r_speed = l_speed = speed
     inches = 0
-    create_dd(l_speed, r_speed)
+    create_dd(r_speed*-5, int(l_speed*-5*c.ADJUST_SPEED))
     while abs(inches) < abs(distance):
         msleep(15)
-        left, right = encoders.values
+        right, left = encoders.values
+        right = -1*right
+        left = -1*left
         inches = 0.5 * ((right * (math.pi * 72 / 508.8) / 24.5) + (left * (math.pi * 72 / 508.8) / 24.5))
         p_error = (right - old_right) - (left - old_left)  # short term
         i_error = right - left  # long term
         r_speed -= int(p * p_error + i * i_error)
         l_speed += int(p * p_error + i * i_error)
-        create_dd(l_speed, r_speed)
+        create_dd(r_speed * -5, int(l_speed * -5 * c.ADJUST_SPEED))
         old_left = left
         old_right = right
         # print("in loop", left, right, inches, l_speed, r_speed)

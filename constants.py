@@ -7,7 +7,7 @@ IS_CLONE = not IS_PRIME
 if IS_PRIME:
     print("I am prime")
 
-    ADJUST_SPEED = 1.07
+    ADJUST_SPEED = 1.0
 
     # Servo Ports
     ARM = 0
