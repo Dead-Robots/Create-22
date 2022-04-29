@@ -29,7 +29,7 @@ def drive_timed(l_speed: int, r_speed: int, drive_time: int):
     stop()
 
 
-def drive_distance_default(speed:int, distance: int):
+def drive_distance_default(speed:int, distance: float):
     converted = (speed*5)/25.4  # mm/sec to in/sec
     ms = abs(int((distance / converted) * 1000))
     print("converted: ", converted, "ms: ", ms)
@@ -49,7 +49,7 @@ def calibrated_gyro_z():
     return gyro_z() - GYRO_OFFSET
 
 
-def drive_distance_straight(speed: int, distance):
+def drive_distance_straight(speed: int, distance: float):
     end_time = time() + abs(distance * 25.4 / speed / 5)
     print("drive time: ", abs(distance * 25.4 / speed / 5))
     r_speed = l_speed = speed
@@ -152,7 +152,7 @@ def drive_until_black(speed):
 
 # encoder values to inches: n * (math.pi * 72 / 508.8) / 24.5 where n equals encoder values
 
-def drive_straight(speed, distance):
+def drive_straight(speed, distance: float):
     p = 0.25  # was p = 0.30
     i = 0.05  # was i = 0.05
     encoders = Encoders()

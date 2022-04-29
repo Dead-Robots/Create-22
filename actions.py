@@ -113,42 +113,30 @@ def collect_poms():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
-    wait_for_button()
 
-    # spin_to_black(3)
-    wait_for_button()
     drive_distance_default(25, 3)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
-    wait_for_button()
     spin_to_black(3)
     drive_distance_default(25, 5.5)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-
-    wait_for_button()
 
     spin_to_white(-3)
     drive_distance_default(25, 5.5)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
-    wait_for_button()
-
     spin_to_black(3)
     drive_distance_default(25, 5.5)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
-    wait_for_button()
-
     spin_to_white(-3)
     drive_distance_default(25, 5.5)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-
-    wait_for_button()
 
     spin_to_black(3)  # used to be spin(-5, 7), 3rd green pom, longer now
     drive_distance_default(25,
@@ -156,62 +144,36 @@ def collect_poms():
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
-    wait_for_button()
-
     spin_to_white(-3)
     drive_distance_default(25, 5.5)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
-    wait_for_button()
-
     spin_to_black(3)
     drive_distance_default(25, 2)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
-    wait_for_button()
-
     drive_distance_default(-25, 3)
     servo.move(c.ARM, c.ARM_BOTGUY)
-    spin(-20, 5)
-    drive_distance_default(50, 16)
+    spin(-20, 8)
+    drive_distance_default(50, 18)
 
 
 def deliver_poms_to_transporter():
-    drive_straight(-60, 69)
-    spin(-50, 160)
+    drive_straight(-60, 70)
+    spin(-30, 162)
     msleep(500)
-    drive_straight(20, 7)
     msleep(500)
 
-    drive_straight(-10, 4)
-    # spin(40, 2)
     servo.move(c.ARM, c.ARM_DELIVER_LOW, 15)
     servo.move(c.WRIST, c.WRIST_DELIVER_LOW, 15)
     msleep(250)
 
-    # spin(20, 1)
-
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
-    debug()
-
-    wait_for_button()
-    servo.move(c.ARM, c.ARM_DELIVER_LOW)
-    wait_for_button()
-    drive_until_black(-40)
-    wait_for_button()
-    spin(20, 90)
-    wait_for_button()
-
-    servo.move(c.ARM, c.ARM_CUBES - 150)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
 
 def deliver_poms_to_airlock():
