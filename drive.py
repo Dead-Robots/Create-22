@@ -31,7 +31,7 @@ def drive_timed(l_speed: int, r_speed: int, drive_time: int):
 
 def drive_distance_default(speed:int, distance: int):
     converted = (speed*5)/25.4  # mm/sec to in/sec
-    ms = int((distance / converted) * 1000)
+    ms = abs(int((distance / converted) * 1000))
     print("converted: ", converted, "ms: ", ms)
     drive_timed(speed, speed, ms)
 
@@ -111,6 +111,8 @@ def spin(speed, angle):
     arc_length = (angle * 9 * math.pi) / 360
     encoders = Encoders()
     left, right = encoders.values
+    right = -1 * right
+    left = -1 * left
     r_speed = l_speed = speed * 5
     inches = 0
     while abs(inches) < abs(arc_length):
@@ -150,8 +152,8 @@ def drive_until_black(speed):
 
 # encoder values to inches: n * (math.pi * 72 / 508.8) / 24.5 where n equals encoder values
 
-def drive_straight(distance, speed):
-    p = 0.30  # was p = 0.25
+def drive_straight(speed, distance):
+    p = 0.25  # was p = 0.30
     i = 0.05  # was i = 0.05
     encoders = Encoders()
     right, left = encoders.values

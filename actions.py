@@ -1,7 +1,8 @@
 from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos
 
 import constants as c
-from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight ,pivot, spin_to_black, spin_to_white, drive, drive_distance_default
+from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
+    spin_to_white, drive, drive_distance_default
 import servo
 from sensors import read_cliffs
 
@@ -21,9 +22,6 @@ def init():
     open_create()  # Initialize the Create
     calibrate_gyro()
 
-    drive_distance_default(50, 30)
-    debug()
-
     enable_servo(c.ARM)
     enable_servo(c.WRIST)
     enable_servo(c.RIGHT_WIPER)
@@ -33,15 +31,13 @@ def init():
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
     servo.move(c.WRIST, c.WRIST_POM)
-    servo.move(c.ARM, c.ARM_DOWN - 100)
+    servo.move(c.ARM, c.ARM_DOWN)
 
     wait_for_button()
 
 
-
-
 def collect_and_deliver_cubes():
-    drive_straight(1.25, 5) # was 1 inch last time
+    drive_straight(5, 1.25)  # was 1 inch last time
     msleep(250)
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CUBES)
@@ -80,21 +76,21 @@ def leave_start_box():
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
     spin(30, 90)
-    drive_straight(4, 40)
+    drive_distance_default(40, 4)
 
     msleep(250)
-    drive_straight(60, -60)
+    drive_straight(-60, 60)
 
 
 def grab_botguy():
     msleep(250)
-    drive_straight(54, -40)
+    drive_straight(-40, 54)
     spin(-50, 80)
-    drive_straight(25, 40)
+    drive_straight(40, 25)
     msleep(250)
-    drive_straight(4, -30)
+    drive_straight(-30, 4)
     spin(15, 50)
-    drive_straight(4, 30)
+    drive_straight(30, 4)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
     debug()
@@ -106,67 +102,89 @@ def collect_poms():
     spin(40, 87)
     msleep(500)
     drive_until_black(-30)
-    spin(-40, 98) # was 83
-    drive_straight(3, 10)
+    spin(-40, 79)  # was 83
+    drive_distance_default(10, 4)  # was 3 inches
+    # drive_straight(3, 10)
 
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+    # servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    # servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+    # spin(20, 3)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
+    wait_for_button()
 
-    spin_to_black(3)
-    drive_straight(3, 25)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-
-    spin_to_white(-3)
-    drive_straight(5.5, 25)
+    # spin_to_black(3)
+    wait_for_button()
+    drive_distance_default(25, 3)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
+    wait_for_button()
     spin_to_black(3)
-    drive_straight(5.5, 25)
+    drive_distance_default(25, 5.5)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
+    wait_for_button()
+
     spin_to_white(-3)
-    drive_straight(5.5, 25)
+    drive_distance_default(25, 5.5)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
+    wait_for_button()
+
     spin_to_black(3)
-    drive_straight(5.5, 25)
+    drive_distance_default(25, 5.5)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
-    spin_to_white(-3) # used to be spin(-5, 7), 3rd green pom, longer now
-    drive_straight(5.5, 25)
+    wait_for_button()
+
+    spin_to_white(-3)
+    drive_distance_default(25, 5.5)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
-    spin_to_black(3)
-    drive_straight(5.5, 25)
+    wait_for_button()
+
+    spin_to_black(3)  # used to be spin(-5, 7), 3rd green pom, longer now
+    drive_distance_default(25,
+                           5)  # used to be 5.5, but the function doesn't even take floats so there may be no difference
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
-    spin_to_white(-3)
-    drive_straight(4.5, 25)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    drive_straight(0.75, -25)
+    wait_for_button()
 
+    spin_to_white(-3)
+    drive_distance_default(25, 5.5)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+
+    wait_for_button()
+
+    spin_to_black(3)
+    drive_distance_default(25, 2)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+
+    wait_for_button()
+
+    drive_distance_default(-25, 3)
     servo.move(c.ARM, c.ARM_BOTGUY)
     spin(-20, 5)
-    drive_straight(16, 50)
+    drive_distance_default(50, 16)
 
 
 def deliver_poms_to_transporter():
-    drive_straight(69, -60)
+    drive_straight(-60, 69)
     spin(-50, 160)
     msleep(500)
-    drive_straight(7, 20)
+    drive_straight(20, 7)
     msleep(500)
 
-    drive_straight(4, -10)
+    drive_straight(-10, 4)
     # spin(40, 2)
     servo.move(c.ARM, c.ARM_DELIVER_LOW, 15)
     servo.move(c.WRIST, c.WRIST_DELIVER_LOW, 15)
@@ -197,12 +215,12 @@ def deliver_poms_to_transporter():
 
 
 def deliver_poms_to_airlock():
-    drive_straight(54, -60)
+    drive_straight(-60, 54)
     spin(40, 90)
-    drive_straight(17, 30)
+    drive_straight(30, 17)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH, 15)
-    drive_straight(3, -40)
+    drive_straight(-40, 3)
     spin(25, 45)
 
 
