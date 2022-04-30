@@ -7,6 +7,8 @@ from time import time, sleep
 import constants as c
 from createserial.commands import create_dd
 from createserial.encoders import Encoders
+
+import actions as a
 from sensors import read_cliffs
 
 GYRO_OFFSET = 0
@@ -126,7 +128,7 @@ def spin(speed, angle):
 
 def spin_to_black(speed):
     r_speed = l_speed = speed * 5
-    while analog_et(0) < 2000:
+    while analog_et(0) < a.pc(2000, 1000):
         msleep(15)
         create_dd(-l_speed, r_speed)
         # print(analog_et(0))
@@ -135,7 +137,7 @@ def spin_to_black(speed):
 
 def spin_to_white(speed):
     r_speed = l_speed = speed * 5
-    while analog_et(0) > 2000:
+    while analog_et(0) > a.pc(2000, 1000):
         msleep(15)
         create_dd(-l_speed, r_speed)
         # print(analog_et(0))
