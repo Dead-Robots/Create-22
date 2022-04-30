@@ -3,6 +3,8 @@ from kipr import msleep
 
 import actions as a
 import drive as d
+from createserial.commands import open_create
+from createserial.serial import open_serial
 
 
 def main():
@@ -14,8 +16,8 @@ def main():
     a.collect_and_deliver_cubes()
     a.leave_start_box()
     a.collect_poms()
-    a.deliver_poms_to_transporter()
-    # a.deliver_poms_to_airlock()
+    # a.deliver_poms_to_transporter()
+    a.deliver_poms_to_airlock()
     a.shut_down()
 
 

@@ -129,7 +129,7 @@ def collect_poms():
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
     spin_to_black(3)
-    drive_distance_default(25, 5.5)
+    drive_distance_default(25, 5) # slightly shorter drive
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
 
@@ -177,13 +177,37 @@ def deliver_poms_to_transporter():
 
 
 def deliver_poms_to_airlock():
-    drive_straight(-60, 54)
+    drive_straight(-60, 60)
     spin(40, 90)
-    drive_straight(30, 17)
+    msleep(500)
+    drive_straight(30, 22)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
+    drive_straight(-40, 6)
+
+    spin(25, 90)
+    msleep(500)
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH, 15)
-    drive_straight(-40, 3)
-    spin(25, 45)
+
+    drive_straight(20, 14)
+    msleep(500)
+    spin(-10, 10)
+    msleep(500)
+    spin(10, 10)
+    msleep(500)
+    drive_straight(-20, 12)
+    spin(-10, 10)
+    drive_straight(10, 8)
+    servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
+    drive_straight(10, 2)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN, 15)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 15)
+    spin(5, 5)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN - 50, 15)
+    msleep(500)
+    spin(-5, 5)
+    servo.move(c.RIGHT_WIPER, c.LEFT_WIPER_OPEN + 50, 15)
+    msleep(500)
+
 
 
 def shut_down():

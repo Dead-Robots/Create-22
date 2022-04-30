@@ -171,10 +171,10 @@ def drive_straight(speed, distance: float):
         inches = 0.5 * ((right * (math.pi * 72 / 508.8) / 24.5) + (left * (math.pi * 72 / 508.8) / 24.5))
         p_error = (right - old_right) - (left - old_left)  # short term
         i_error = right - left  # long term
+        # print(p_error, i_error, p * p_error, i * i_error)
         r_speed -= int(p * p_error + i * i_error)
         l_speed += int(p * p_error + i * i_error)
         create_dd(r_speed * -5, int(l_speed * -5 * c.ADJUST_SPEED))
         old_left = left
         old_right = right
-        # print("in loop", left, right, inches, l_speed, r_speed)
     drive(0, 0)
