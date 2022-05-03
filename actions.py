@@ -11,6 +11,9 @@ from createserial.commands import open_create, close_create
 from createserial.serial import open_serial, close_serial
 
 
+# from createserial.shutdown import shutdown_create_in
+
+
 def init():
     print("initing")
     # if not create_connect_once():
@@ -29,7 +32,6 @@ def init():
     enable_servo(c.LEFT_WIPER)
 
     power_on_self_test()
-    wait_for_button()
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
@@ -42,29 +44,31 @@ def init():
     global t
     t = time.time()
 
+    # shutdown_create_in(119)
+
 
 def power_on_self_test():
     print("starting power on self test")
     print("lift arm")
-    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
+    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 25)
     print("lift wrist")
-    servo.move(c.WRIST, c.WRIST_UP, 15)
+    servo.move(c.WRIST, c.WRIST_UP, 25)
     print("open/close right wiper")
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 15)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED, 15)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 25)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED, 25)
     print("open/close left wiper")
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN, 15)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED, 15)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN, 25)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED, 25)
 
     print("driving forward (+)")
-    drive_straight(20, 6)
+    drive_straight(35, 6)
     print("driving backward (-)")
-    drive_straight(-20, 6)
+    drive_straight(-35, 6)
     msleep(500)
     print("spin counterclockwise (+)")
-    spin(20, 90)
+    spin(35, 90)
     print("spin clockwise (-)")
-    spin(-20, 90)
+    spin(-35, 90)
     print("finished power on self test!")
 
 
@@ -138,75 +142,73 @@ def collect_poms():
     spin(40, 87)
     msleep(500)
     drive_until_black(-30)
-    spin(-40, pc(79, 90))  # was 83 for prime and was 86 for clone
+    spin(-40, pc(79, 82))  # was 83 for prime and was 86 for clone
     drive_distance_default(10, pc(3.5, 4.0))  # was 3 inches for clone
-    # drive_straight(3, 10)
 
-    # servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    # servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    # spin(20, 3)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
 
-    drive_distance_default(25, pc(3, 2.5))
+    drive_distance_default(25, pc(3, 4))
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
     spin_to_black(pc(3, 3))
     servo.move(c.ARM, c.ARM_DOWN, 15)
     drive_distance_default(25, pc(5.2, 5.5))
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-    servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
     spin_to_white(pc(-3, -3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(25, pc(5.2, 5.5))
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
     spin_to_black(pc(3, 3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(5, 5.25)) # slightly shorter drive
+    drive_distance_default(25, pc(5, 5.25))  # slightly shorter drive
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-    servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
     spin_to_white(pc(-3, -3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(25, pc(5, 5))
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
     spin_to_black(pc(3, 3))  # used to be spin(-5, 7), 3rd green pom, longer now
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(25, pc(5, 5.25))
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-    servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
     spin_to_white(pc(-3, -3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(25, pc(5.2, 5.25))
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
     spin_to_black(pc(3, 3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(3.5, 3))
+
+    drive_distance_default(25, pc(3.5, 4.5))
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
-    servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
     drive_distance_default(-25, 3)
 
     servo.move(c.ARM, c.ARM_BOTGUY)
+    servo.move(c.WRIST, c.WRIST_DRIVE_UP, 15)
     spin(-20, 8)
     drive_distance_default(50, pc(18, 20))
 
@@ -247,21 +249,22 @@ def deliver_poms_to_airlock():
     msleep(500)
     drive_straight(-20, 13)
     spin(-10, 10)
-    servo.move(c.ARM, c.ARM_DELIVER_FINAL + 75, 10)
-    drive_straight(10, 10)
+    servo.move(c.ARM, c.ARM_DELIVER_FINAL + pc(75, 427), 10)
+    drive_straight(10, pc(10, 11))
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
     spin(-10, 3)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN, 15)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 15)
 
     spin(5, 5)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN - 50, 15)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN - 50, 5)
     msleep(500)
     disable_servo(c.RIGHT_WIPER)
     spin(-5, 5)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN + 50, 15)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN + 50, 5)
     msleep(500)
     disable_servo(c.LEFT_WIPER)
+    wait_for_button()
 
 
 def shut_down():
