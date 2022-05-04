@@ -1,6 +1,5 @@
 import time
-from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo
-
+from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog
 import constants as c
 from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
     spin_to_white, drive, drive_distance_default
@@ -11,7 +10,7 @@ from createserial.commands import open_create, close_create
 from createserial.serial import open_serial, close_serial
 
 
-# from createserial.shutdown import shutdown_create_in
+from createserial.shutdown import shutdown_create_in
 
 
 def init():
@@ -26,10 +25,14 @@ def init():
     open_create()  # Initialize the Create
     calibrate_gyro()
 
-    enable_servo(c.ARM)
     enable_servo(c.WRIST)
+    servo.move(c.WRIST, c.WRIST_POM)
+    enable_servo(c.ARM)
+    servo.move(c.ARM, c.ARM_DOWN + 100)
     enable_servo(c.RIGHT_WIPER)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     enable_servo(c.LEFT_WIPER)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
 
     power_on_self_test()
 
@@ -44,15 +47,31 @@ def init():
     global t
     t = time.time()
 
-    # shutdown_create_in(119)
+    shutdown_create_in(119)
 
 
 def power_on_self_test():
     print("starting power on self test")
+    print("testing white")
+    if analog(0) < pc(2000, 1000):
+        print("I see white.")
+    else:
+        print("uh oh")
+        shut_down()
+
     print("lift arm")
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 25)
+
+    print("testing black")
+    if analog(0) > pc(2000, 1000):
+        print("I see black.")
+    else:
+        print("uh oh")
+        shut_down()
+
     print("lift wrist")
     servo.move(c.WRIST, c.WRIST_UP, 25)
+
     print("open/close right wiper")
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 25)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED, 25)
@@ -64,11 +83,6 @@ def power_on_self_test():
     drive_straight(35, 6)
     print("driving backward (-)")
     drive_straight(-35, 6)
-    msleep(500)
-    print("spin counterclockwise (+)")
-    spin(35, 90)
-    print("spin clockwise (-)")
-    spin(-35, 90)
     print("finished power on self test!")
 
 
@@ -262,9 +276,10 @@ def deliver_poms_to_airlock():
     disable_servo(c.RIGHT_WIPER)
     spin(-5, 5)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN + 50, 5)
+    msleep(250)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN - 50, 5)
     msleep(500)
     disable_servo(c.LEFT_WIPER)
-    wait_for_button()
 
 
 def shut_down():

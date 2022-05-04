@@ -37,9 +37,9 @@ if IS_PRIME:
     WRIST_DRIVE_UP = 1180 # value for wrist to pe perpendicular to ground when driving
 
     LEFT_WIPER_CLOSED = 350
-    LEFT_WIPER_CENTER = 900
-    LEFT_WIPER_OPEN = 1300
-    LEFT_WIPER_CUBES = 1340
+    LEFT_WIPER_CENTER = 720
+    LEFT_WIPER_OPEN = 1120
+    LEFT_WIPER_CUBES = 1160
 
     RIGHT_WIPER_CLOSED = 1050
     RIGHT_WIPER_CENTER = 800
@@ -59,7 +59,7 @@ elif IS_CLONE:
 
     # Servo Positions
     ARM_BOTGUY = 2047
-    ARM_DOWN = 300 + 100
+    ARM_DOWN = 400
     ARM_DELIVER_HIGH = 2047
     ARM_DELIVER_FINAL = 1620
     ARM_CUBES = 1330
@@ -75,12 +75,12 @@ elif IS_CLONE:
     WRIST_DELIVER_LOW = 1800
     WRIST_DRIVE_UP = 1570 # value for wrist to pe perpendicular to ground when driving
 
-    LEFT_WIPER_CLOSED = 0
+    LEFT_WIPER_CLOSED = 140
     LEFT_WIPER_CENTER = 425
     LEFT_WIPER_OPEN = 860
     LEFT_WIPER_CUBES = 1000
 
-    RIGHT_WIPER_CLOSED = 1300
+    RIGHT_WIPER_CLOSED = 1100
     RIGHT_WIPER_CENTER = 740
     RIGHT_WIPER_OPEN = 450
 
