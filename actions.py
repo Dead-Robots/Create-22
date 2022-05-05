@@ -47,7 +47,7 @@ def init():
     global t
     t = time.time()
 
-    shutdown_create_in(119)
+    # shutdown_create_in(119)
 
 
 def power_on_self_test():
@@ -157,7 +157,7 @@ def collect_poms():
     msleep(500)
     drive_until_black(-30)
     spin(-40, pc(79, 82))  # was 83 for prime and was 86 for clone
-    drive_distance_default(10, pc(3.5, 4.0))  # was 3 inches for clone
+    drive_distance_default(10, pc(3.5, 3.25))  # was 3 inches for clone
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
@@ -207,7 +207,7 @@ def collect_poms():
     spin_to_white(pc(-3, -3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(25, pc(5.2, 5.25))
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED - 100)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
@@ -216,9 +216,16 @@ def collect_poms():
 
     drive_distance_default(25, pc(3.5, 4.5))
 
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED + 100)
 
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
+
+    for x in range(3):
+        servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
+        servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED + 100)
+        servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+        servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED - 100)
+
     drive_distance_default(-25, 3)
 
     servo.move(c.ARM, c.ARM_BOTGUY)
@@ -246,7 +253,7 @@ def deliver_poms_to_transporter():
 def deliver_poms_to_airlock():
     drive_straight(-60, 60)
     spin(40, 90)
-    msleep(5000)
+    msleep(500)
     drive_straight(30, 22)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
     drive_straight(-40, 6)
@@ -255,31 +262,35 @@ def deliver_poms_to_airlock():
     msleep(500)
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH, 15)
 
-    drive_straight(20, 15)
+    drive_straight(20, pc(15, 17))
     msleep(500)
     spin(-10, 15)
     msleep(500)
     spin(10, 15)
     msleep(500)
-    drive_straight(-20, 13)
+    drive_straight(-20, pc(13, 15))
     spin(-10, 10)
-    servo.move(c.ARM, c.ARM_DELIVER_FINAL + pc(75, 427), 10)
+    servo.move(c.ARM, pc(c.ARM_DELIVER_FINAL + 75, c.ARM_DELIVER_HIGH), 10)
     drive_straight(10, pc(10, 11))
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
+    servo.move(c.WRIST, pc(c.WRIST_DELIVER_HIGH, c.WRIST_DELIVER_FINAL))  # prime doesn't need wrist adjustment here
     spin(-10, 3)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN, 15)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 15)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN, 15)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN, 15)
 
-    spin(5, 5)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN - 50, 5)
-    msleep(500)
-    disable_servo(c.RIGHT_WIPER)
-    spin(-5, 5)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN + 50, 5)
-    msleep(250)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN - 50, 5)
+    spin(3, 5)
+    for x in range(3):
+        servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN)
+        servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     msleep(500)
     disable_servo(c.LEFT_WIPER)
+    spin(-3, 5)
+    for x in range(3):
+        servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN)
+        servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    msleep(500)
+    disable_servo(c.RIGHT_WIPER)
+    spin(3, 3)
 
 
 def shut_down():
