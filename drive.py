@@ -31,7 +31,7 @@ def drive_timed(l_speed: int, r_speed: int, drive_time: int):
     stop()
 
 
-def drive_distance_default(speed:int, distance: float):
+def drive_distance_default(speed: int, distance: float):
     converted = (speed*5)/25.4  # mm/sec to in/sec
     ms = abs(int((distance / converted) * 1000))
     print("converted: ", converted, "ms: ", ms)
