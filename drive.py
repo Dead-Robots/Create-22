@@ -32,7 +32,7 @@ def drive_timed(l_speed: int, r_speed: int, drive_time: int):
 
 
 def drive_distance_default(speed: int, distance: float):
-    converted = (speed*5)/25.4  # mm/sec to in/sec
+    converted = (speed * 5) / 25.4  # mm/sec to in/sec
     ms = abs(int((distance / converted) * 1000))
     print("converted: ", converted, "ms: ", ms)
     drive_timed(speed, speed, ms)
@@ -120,7 +120,7 @@ def spin(speed, angle):
     while abs(inches) < abs(arc_length):
         msleep(15)
         left, right = encoders.values
-        inches = abs(right) * ((math.pi * 72 / 508.8) / 24.5) # + (abs(left) * (math.pi * 72 / 508.8) / 24.5)
+        inches = abs(right) * ((math.pi * 72 / 508.8) / 24.5)  # + (abs(left) * (math.pi * 72 / 508.8) / 24.5)
         create_dd(-l_speed, r_speed)
         # print("in loop", left, right, inches, l_speed, r_speed, arc_length)
     drive(0, 0)
@@ -128,7 +128,7 @@ def spin(speed, angle):
 
 def spin_to_black(speed):
     r_speed = l_speed = speed * 5
-    while analog_et(0) < a.pc(2000, 1000):
+    while analog_et(0) < c.TOPHAT_THRESHOLD:
         msleep(15)
         create_dd(-l_speed, r_speed)
         # print(analog_et(0))
@@ -137,11 +137,18 @@ def spin_to_black(speed):
 
 def spin_to_white(speed):
     r_speed = l_speed = speed * 5
-    while analog_et(0) > a.pc(2000, 1000):
+    while analog_et(0) > c.TOPHAT_THRESHOLD:
         msleep(15)
         create_dd(-l_speed, r_speed)
         # print(analog_et(0))
     drive(0, 0)
+
+
+def on_white():
+    if analog_et(0) < c.TOPHAT_THRESHOLD:
+        return True
+    else:
+        return False
 
 
 def drive_until_black(speed):
@@ -164,12 +171,12 @@ def drive_straight(speed, distance: float):
     old_left, old_right = left, right
     r_speed = l_speed = speed
     inches = 0
-    create_dd(r_speed*-5, int(l_speed*-5*c.ADJUST_SPEED))
+    create_dd(r_speed * -5, int(l_speed * -5 * c.ADJUST_SPEED))
     while abs(inches) < abs(distance):
         msleep(15)
         right, left = encoders.values
-        right = -1*right
-        left = -1*left
+        right = -1 * right
+        left = -1 * left
         inches = 0.5 * ((right * (math.pi * 72 / 508.8) / 24.5) + (left * (math.pi * 72 / 508.8) / 24.5))
         p_error = (right - old_right) - (left - old_left)  # short term
         i_error = right - left  # long term
