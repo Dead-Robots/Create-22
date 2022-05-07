@@ -48,7 +48,6 @@ if IS_PRIME:
     RIGHT_WIPER_OPEN = 450
     RIGHT_WIPER_DELIVER_OPEN = 700
 
-    TOPHAT_THRESHOLD = 2000
 
 elif IS_CLONE:
     print("I am clone")
@@ -69,7 +68,6 @@ elif IS_CLONE:
     ARM_CUBES = 1330
     ARM_DELIVER_LOW = 700
 
-
     WRIST_START = 1870
     WRIST_UP = 940
     WRIST_BOTGUY = 500
@@ -80,7 +78,7 @@ elif IS_CLONE:
     WRIST_DELIVER_LOW = 1800
     WRIST_DRIVE_UP = 1570 # value for wrist to pe perpendicular to ground when driving
 
-    LEFT_WIPER_CLOSED = 350 #140
+    LEFT_WIPER_CLOSED = 140
     LEFT_WIPER_CENTER = 425
     LEFT_WIPER_OPEN = 860
     LEFT_WIPER_CUBES = 1000
@@ -90,8 +88,6 @@ elif IS_CLONE:
     RIGHT_WIPER_CENTER = 740
     RIGHT_WIPER_OPEN = 450
     RIGHT_WIPER_DELIVER_OPEN = 800
-
-    TOPHAT_THRESHOLD = 1000
 
 
 else:
