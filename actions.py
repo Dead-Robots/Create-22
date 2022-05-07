@@ -2,15 +2,16 @@ import time
 from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog
 import constants as c
 from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
-    spin_to_white, drive, drive_distance_default
+    spin_to_white, drive, drive_distance_default, on_white, spin_to_white_2, spin_to_black_2
 import servo
 from sensors import read_cliffs
 
 from createserial.commands import open_create, close_create
 from createserial.serial import open_serial, close_serial
 
-
 from createserial.shutdown import shutdown_create_in
+
+t = 0
 
 
 def init():
@@ -26,7 +27,7 @@ def init():
     calibrate_gyro()
 
     enable_servo(c.WRIST)
-    servo.move(c.WRIST, c.WRIST_POM)
+    servo.move(c.WRIST, c.WRIST_START)
     enable_servo(c.ARM)
     servo.move(c.ARM, c.ARM_DOWN + 100)
     enable_servo(c.RIGHT_WIPER)
@@ -47,13 +48,13 @@ def init():
     global t
     t = time.time()
 
-    # shutdown_create_in(119)
+    shutdown_create_in(119)
 
 
 def power_on_self_test():
     print("starting power on self test")
     print("testing white")
-    if analog(0) < pc(2000, 1000):
+    if analog(0) < c.TOPHAT_THRESHOLD:
         print("I see white.")
     else:
         print("uh oh")
@@ -63,7 +64,7 @@ def power_on_self_test():
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 25)
 
     print("testing black")
-    if analog(0) > pc(2000, 1000):
+    if analog(0) > c.TOPHAT_THRESHOLD:
         print("I see black.")
     else:
         print("uh oh")
@@ -155,72 +156,128 @@ def grab_botguy():
 def collect_poms():
     spin(40, 87)
     msleep(500)
-    drive_until_black(-30)
-    spin(-40, pc(79, 82))  # was 83 for prime and was 86 for clone
-    drive_distance_default(10, pc(3.5, 3.25))  # was 3 inches for clone
+    drive_until_black(pc(-30, -30))
+    if c.IS_PRIME:
+        spin(-40, pc(79, 90))  # was 83 for prime and was 86 for clone
+    if c.IS_CLONE:
+        servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+        servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+        servo.move(c.WRIST, c.WRIST_POM)
+        servo.move(c.ARM, c.ARM_DOWN)  # lift higher, so wrist doesn't get snagged on the tape?
+
+        spin_to_black_2(-3)
+
+        spin_to_white_2(-3)
+
+        spin(-3, 1)
+
+    drive_distance_default(10, pc(3.5, 5))  # was 3 inches for clone
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
 
-    drive_distance_default(25, pc(3, 4))
+    drive_distance_default(25, pc(3, 0))
+    print("picking up the first red pom")
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    spin_to_black(pc(3, 3))
+    if c.IS_CLONE:
+        if not on_white():
+            print("crossed the line! on black 1")
+            spin_to_white_2(-3)
+        spin_to_black_2(3)
+
+    spin_to_black(3)
     servo.move(c.ARM, c.ARM_DOWN, 15)
-    drive_distance_default(25, pc(5.2, 5.5))
+    drive_distance_default(25, pc(5.2, 5.3))
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    spin_to_white(pc(-3, -3))
+    if c.IS_CLONE:
+        if on_white():
+            print("crossed the line! on white 2")
+            spin_to_black_2(-3)
+        spin_to_white_2(-3)
+
+    spin_to_white(-3)  # the problem
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(5.2, 5.5))
+    drive_distance_default(25, pc(5.2, 5.1))
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    spin_to_black(pc(3, 3))
+    if c.IS_CLONE:
+        if not on_white():
+            print("crossed the line! on black 3")
+            spin_to_white_2(-3)
+        spin_to_black_2(3)
+
+    spin_to_black(3)
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(25, pc(5, 5.25))  # slightly shorter drive
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    spin_to_white(pc(-3, -3))
+    if c.IS_CLONE:
+        if on_white():
+            print("crossed the line! on white 4")
+            spin_to_black_2(-3)
+        spin_to_white_2(-3)
+
+    spin_to_white(-3)
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(25, pc(5, 5))
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    spin_to_black(pc(3, 3))  # used to be spin(-5, 7), 3rd green pom, longer now
+    if c.IS_CLONE:
+        if not on_white():
+            print("crossed the line! on black 5")
+            spin_to_white_2(-3)
+        spin_to_black_2(3)
+
+    spin_to_black(3)  # used to be spin(-5, 7), 3rd green pom, longer now
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(25, pc(5, 5.25))
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    spin_to_white(pc(-3, -3))
+    if c.IS_CLONE:
+        if on_white():
+            print("crossed the line! on white 6")
+            spin_to_black_2(-3)
+        spin_to_white_2(-3)
+
+    spin_to_white(-3)
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(5.2, 5.25))
+    drive_distance_default(25, pc(5.2, 5.4))
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED - 100)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    spin_to_black(pc(3, 3))
+    if c.IS_CLONE:
+        if not on_white():
+            print("crossed the line! on black 7")
+            spin_to_white_2(-3)
+        spin_to_black_2(3)
+
+    spin_to_black(3)
     servo.move(c.ARM, c.ARM_DOWN, 10)
 
-    drive_distance_default(25, pc(3.5, 4.5))
+    drive_distance_default(25, pc(3.5, 3.8))
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED + 100)
 
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    for x in range(3):
+    for x in range(0):
         servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
         servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED + 100)
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
@@ -253,7 +310,7 @@ def deliver_poms_to_transporter():
 def deliver_poms_to_airlock():
     drive_straight(-60, 60)
     spin(40, 90)
-    msleep(500)
+    msleep(10000)
     drive_straight(30, 22)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
     drive_straight(-40, 6)
@@ -262,7 +319,7 @@ def deliver_poms_to_airlock():
     msleep(500)
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH, 15)
 
-    drive_straight(20, pc(15, 17))
+    drive_straight(20, pc(15, 15))
     msleep(500)
     spin(-10, 15)
     msleep(500)
@@ -270,27 +327,28 @@ def deliver_poms_to_airlock():
     msleep(500)
     drive_straight(-20, pc(13, 15))
     spin(-10, 10)
-    servo.move(c.ARM, pc(c.ARM_DELIVER_FINAL + 75, c.ARM_DELIVER_HIGH), 10)
+    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)
     drive_straight(10, pc(10, 11))
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
-    servo.move(c.WRIST, pc(c.WRIST_DELIVER_HIGH, c.WRIST_DELIVER_FINAL))  # prime doesn't need wrist adjustment here
+    servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
     spin(-10, 3)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN, 15)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN, 15)
 
     spin(3, 5)
-    for x in range(3):
+    for x in range(0):
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN)
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     msleep(500)
     disable_servo(c.LEFT_WIPER)
     spin(-3, 5)
-    for x in range(3):
+    for x in range(0):
         servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN)
         servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     msleep(500)
     disable_servo(c.RIGHT_WIPER)
     spin(3, 3)
+    servo.move(c.ARM, c.ARM_DELIVER_FINAL - 100, 10)  # places the arm completely down on the airlock
 
 
 def shut_down():
