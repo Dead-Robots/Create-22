@@ -3,7 +3,6 @@ from kipr import digital
 IS_PRIME = not digital(0)
 IS_CLONE = not IS_PRIME
 
-
 if IS_PRIME:
     print("I am prime")
 
@@ -35,7 +34,7 @@ if IS_PRIME:
     WRIST_DELIVER_FINAL = 770
     WRIST_CUBES = 1245
     WRIST_DELIVER_LOW = 1800
-    WRIST_DRIVE_UP = 1180 # value for wrist to pe perpendicular to ground when driving
+    WRIST_DRIVE_UP = 1180  # value for wrist to pe perpendicular to ground when driving
 
     LEFT_WIPER_CLOSED = 400
     LEFT_WIPER_CENTER = 720
@@ -63,24 +62,23 @@ elif IS_CLONE:
 
     # Servo Positions
     ARM_BOTGUY = 2047
-    ARM_DOWN = 400
+    ARM_DOWN = 500
     ARM_DELIVER_HIGH = 1800
     ARM_DELIVER_FINAL = 1700
     ARM_CUBES = 1330
     ARM_DELIVER_LOW = 700
 
-
     WRIST_START = 1870
     WRIST_UP = 940
     WRIST_BOTGUY = 500
-    WRIST_POM = 2047  # originally 1773
+    WRIST_POM = 1850  # originally 1773
     WRIST_DELIVER_HIGH = 950
     WRIST_DELIVER_FINAL = 800
     WRIST_CUBES = 1245
     WRIST_DELIVER_LOW = 1800
-    WRIST_DRIVE_UP = 1570 # value for wrist to pe perpendicular to ground when driving
+    WRIST_DRIVE_UP = 1570  # value for wrist to pe perpendicular to ground when driving
 
-    LEFT_WIPER_CLOSED = 350 #140
+    LEFT_WIPER_CLOSED = 350  # 140
     LEFT_WIPER_CENTER = 425
     LEFT_WIPER_OPEN = 860
     LEFT_WIPER_CUBES = 1000
