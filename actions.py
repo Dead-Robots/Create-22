@@ -11,7 +11,6 @@ from createserial.serial import open_serial, close_serial
 
 from createserial.shutdown import shutdown_create_in
 
-t = 0
 
 def init():
     print("initializing :)")
@@ -20,12 +19,6 @@ def init():
     #     print("Is the create on?")
     #     exit()
     # create_full()
-
-    open_serial()  # Open a serial port connection to the Create
-    open_create()  # Initialize the Create
-
-    close_create() # grayson's solution to wacky first run 
-    close_serial()
 
     open_serial()  # Open a serial port connection to the Create
     open_create()  # Initialize the Create
@@ -162,7 +155,7 @@ def collect_poms():
     spin(40, 87)
     msleep(500)
     drive_until_black(-30)
-    spin(-30, pc(79, 85))  # was 83 for prime and was 86 for clone
+    spin(-40, pc(79, 85))  # was 83 for prime and was 86 for clone
     drive_distance_default(10, pc(3.5, 3.8))  # was 3 inches for clone
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
@@ -174,13 +167,12 @@ def collect_poms():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
 
-    wait_for_button()
-
     if not on_white():
         print("crossed the line! on black 1")
-        spin_to_white(-3)
+        wait_for_button()
+        spin_to_white(pc(3, 3))
 
-    spin_to_black(3)
+    spin_to_black(pc(3, 3))
     servo.move(c.ARM, c.ARM_DOWN, 15)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     drive_distance_default(25, pc(5.2, 5.5))
@@ -189,9 +181,10 @@ def collect_poms():
 
     if on_white():
         print("crossed the line! on white 2")
-        spin_to_black(-3)
+        wait_for_button()
+        spin_to_black(pc(-3, -3))
 
-    spin_to_white(-3)
+    spin_to_white(pc(-3, -3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     drive_distance_default(25, pc(5.2, 5.5))
@@ -200,9 +193,10 @@ def collect_poms():
 
     if not on_white():
         print("crossed the line! on black 3")
-        spin_to_white(-3)
+        wait_for_button()
+        spin_to_white(pc(3, 3))
 
-    spin_to_black(3)
+    spin_to_black(pc(3, 3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     drive_distance_default(25, pc(5, 5.25))  # slightly shorter drive
@@ -211,9 +205,10 @@ def collect_poms():
 
     if on_white():
         print("crossed the line! on white 4")
-        spin_to_black(-3)
+        wait_for_button()
+        spin_to_black(pc(-3, -3))
 
-    spin_to_white(-3)
+    spin_to_white(pc(-3, -3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     drive_distance_default(25, pc(5, 5))
@@ -222,9 +217,10 @@ def collect_poms():
 
     if not on_white():
         print("crossed the line! on black 5")
-        spin_to_white(-3)
+        wait_for_button()
+        spin_to_white(pc(3, 3))
 
-    spin_to_black(3)  # used to be spin(-5, 7), 3rd green pom, longer now
+    spin_to_black(pc(3, 3))  # used to be spin(-5, 7), 3rd green pom, longer now
     servo.move(c.ARM, c.ARM_DOWN, 10)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     drive_distance_default(25, pc(5, 5.25))
@@ -234,9 +230,9 @@ def collect_poms():
     if on_white():
         print("crossed the line! on white 6")
         wait_for_button()
-        spin_to_black(-3)
+        spin_to_black(pc(-3, -3))
 
-    spin_to_white(-3)
+    spin_to_white(pc(-3, -3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     drive_distance_default(25, pc(5.2, 5.25))
@@ -245,9 +241,10 @@ def collect_poms():
 
     if not on_white():
         print("crossed the line! on black 7")
-        spin_to_white(-3)
+        wait_for_button()
+        spin_to_white(pc(3, 3))
 
-    spin_to_black(3)
+    spin_to_black(pc(3, 3))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
 
@@ -316,15 +313,13 @@ def deliver_poms_to_airlock():
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN, 15)
 
     spin(3, 5)
-    for x in range(0): # was 3 before
-        wait_for_button()
+    for x in range(3):
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN)
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     msleep(500)
     disable_servo(c.LEFT_WIPER)
     spin(-3, 5)
-    for x in range(0): # was 3 before
-        wait_for_button()
+    for x in range(3):
         servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN)
         servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     msleep(500)
