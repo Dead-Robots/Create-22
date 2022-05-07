@@ -10,11 +10,11 @@ from createserial.commands import open_create, close_create
 from createserial.serial import open_serial, close_serial
 
 
-# from createserial.shutdown import shutdown_create_in
+from createserial.shutdown import shutdown_create_in
 
 
 def init():
-    print("initializing :)")
+    print("initing")
     # if not create_connect_once():
     #     print("failed to connect")
     #     print("Is the create on?")
