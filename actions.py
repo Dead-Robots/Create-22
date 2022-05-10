@@ -6,7 +6,7 @@ from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, dr
 import servo
 from sensors import read_cliffs
 
-from createserial.commands import open_create, close_create
+from createserial.commands import open_create, close_create, reset_create
 from createserial.serial import open_serial, close_serial
 
 from createserial.shutdown import shutdown_create_in
@@ -15,16 +15,13 @@ t = 0
 
 
 def init():
-    print("initing")
-    # if not create_connect_once():
-    #     print("failed to connect")
-    #     print("Is the create on?")
-    #     exit()
-    # create_full()
-
+    print("resetting create...")
     open_serial()  # Open a serial port connection to the Create
+    reset_create()
+    print("initializing...")
     open_create()  # Initialize the Create
-    calibrate_gyro()
+
+    # calibrate_gyro()
 
     enable_servo(c.WRIST)
     servo.move(c.WRIST, c.WRIST_START)
@@ -131,7 +128,7 @@ def leave_start_box():
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
     spin(30, 90)
-    drive_distance_default(40, pc(4, 6))
+    drive_distance_default(40, pc(5, 6))
 
     msleep(250)
     drive_straight(-60, 60)
@@ -205,7 +202,7 @@ def collect_poms():
 
     spin_to_white(-3)  # the problem
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(5.2, 5.1))
+    drive_distance_default(25, pc(5, 5.1)) # prime was 5.2
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
