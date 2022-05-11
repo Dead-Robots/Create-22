@@ -3,6 +3,8 @@ from kipr import digital
 IS_PRIME = not digital(0)
 IS_CLONE = not IS_PRIME
 
+START_LIGHT = 1
+START_LIGHT_THRESHOLD = 0
 
 if IS_PRIME:
     print("I am prime")
@@ -21,8 +23,8 @@ if IS_PRIME:
     ARM_INIT = 1390
     ARM_START = 600
     ARM_BOTGUY = 2047
-    ARM_DOWN = 400
-    ARM_DELIVER_HIGH = 1790
+    ARM_DOWN = 325
+    ARM_DELIVER_HIGH = 1700
     ARM_DELIVER_FINAL = 1620
     ARM_CUBES = 1330
     ARM_DELIVER_LOW = 700
@@ -70,7 +72,7 @@ elif IS_CLONE:
     ARM_CUBES = 1330
     ARM_DELIVER_LOW = 700
 
-    WRIST_START = 1800
+    WRIST_START = 1950
     WRIST_UP = 940
     WRIST_BOTGUY = 500
     WRIST_POM = 1820  # originally 1773

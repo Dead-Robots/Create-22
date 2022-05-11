@@ -26,7 +26,7 @@ def init():
     enable_servo(c.WRIST)
     servo.move(c.WRIST, c.WRIST_START)
     enable_servo(c.ARM)
-    servo.move(c.ARM, c.ARM_DOWN + 100)
+    servo.move(c.ARM, c.ARM_DOWN)
     enable_servo(c.RIGHT_WIPER)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     enable_servo(c.LEFT_WIPER)
@@ -154,68 +154,73 @@ def collect_poms():
     spin(40, 87)
     msleep(500)
     drive_until_black(pc(-30, -30))
-    if c.IS_PRIME:
-        spin(-40, pc(79, 90))  # was 83 for prime and was 86 for clone
-    if c.IS_CLONE:
-        servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
-        servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-        servo.move(c.WRIST, c.WRIST_POM)
-        servo.move(c.ARM, c.ARM_DOWN)  # lift higher, so wrist doesn't get snagged on the tape?
+    # if c.IS_PRIME:
+    #     spin(-40, pc(79, 90))  # was 83 for prime and was 86 for clone
+    # if c.IS_CLONE:
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+    servo.move(c.WRIST, c.WRIST_POM+50)
+    servo.move(c.ARM, c.ARM_DOWN+25)  # lift higher, so wrist doesn't get snagged on the tape?
 
-        spin_to_black_2(-3)
+    spin_to_black_2(-3)
 
-        spin_to_white_2(-3)
+    spin_to_white_2(-3)
 
-        spin(-3, 1)
+    spin(-3, pc(8, 1))
 
-    drive_distance_default(10, pc(3.5, 5))  # was 3 inches for clone
+    drive_distance_default(10, pc(5, 5))  # was 3 inches for clone
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
 
-    drive_distance_default(25, pc(3, 0))
+    wait_for_button()
+
+    drive_distance_default(10, pc(2, 0))
     print("picking up the first red pom")
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    if c.IS_CLONE:
-        if not on_white():
-            print("crossed the line! on black 1")
-            spin_to_white_2(-3)
-        spin_to_black_2(3)
+
+    # if c.IS_CLONE:
+    if not on_white():
+        print("crossed the line! on black 1")
+        spin_to_white_2(-3)
+    spin_to_black_2(3)
 
     spin_to_black(3)
+
     servo.move(c.ARM, c.ARM_DOWN, 15)
-    drive_distance_default(25, pc(5.2, 5.3))
+    drive_distance_default(10, pc(5.2, 5.3))
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    if c.IS_CLONE:
-        if on_white():
-            print("crossed the line! on white 2")
-            spin_to_black_2(-3)
-        spin_to_white_2(-3)
+    # if c.IS_CLONE:
+    if on_white():
+        print("crossed the line! on white 2")
+        spin_to_black_2(-3)
+    spin_to_white_2(-3)
 
     spin_to_white(-3)  # the problem
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(5, 5.1)) # prime was 5.2
+    drive_distance_default(10, pc(5.2, 5.1)) # prime was 5.2
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
 
-    if c.IS_CLONE:
-        if not on_white():
-            print("crossed the line! on black 3")
-            spin_to_white_2(-3)
-        spin_to_black_2(3)
+    wait_for_button()
+    # if c.IS_CLONE:
+    if not on_white():
+        print("crossed the line! on black 3")
+        spin_to_white_2(-3)
+    spin_to_black_2(3)
 
     spin_to_black(3)
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(5, 5.25))  # slightly shorter drive
+    drive_distance_default(10, pc(4.5, 5.25))  # slightly shorter drive
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
@@ -228,7 +233,7 @@ def collect_poms():
 
     spin_to_white(-3)
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(5, 5))
+    drive_distance_default(10, pc(5.5, 5))
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
@@ -241,7 +246,7 @@ def collect_poms():
 
     spin_to_black(3)  # used to be spin(-5, 7), 3rd green pom, longer now
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(5, 5.25))
+    drive_distance_default(10, pc(4.5, 5.25))
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
@@ -254,7 +259,7 @@ def collect_poms():
 
     spin_to_white(-3)
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(25, pc(5.2, 5.4))
+    drive_distance_default(10, pc(5.5, 5.4))
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED - 100)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 25), 10)
@@ -268,7 +273,7 @@ def collect_poms():
     spin_to_black(3)
     servo.move(c.ARM, c.ARM_DOWN, 10)
 
-    drive_distance_default(25, pc(3.5, 3.8))
+    drive_distance_default(10, pc(3.5, 3.8))
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED + 100)
 
