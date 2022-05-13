@@ -1,10 +1,10 @@
 import time
-from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog
+from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog, analog_et
 import constants as c
 from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
     spin_to_white, drive, drive_distance_default, on_white, spin_to_white_2, spin_to_black_2
 import servo
-from sensors import read_cliffs
+from sensors import read_cliffs, wait_4_light
 
 from createserial.commands import open_create, close_create, reset_create
 from createserial.serial import open_serial, close_serial
@@ -40,7 +40,8 @@ def init():
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
 
-    wait_for_button()
+    # wait_for_button()
+    wait_4_light()
 
     global t
     t = time.time()
@@ -128,7 +129,7 @@ def leave_start_box():
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
     spin(30, 95)
-    drive_distance_default(40, pc(5, 6))
+    drive_distance_default(40, pc(7, 6))
 
     msleep(250)
     drive_straight(-60, 60)
@@ -151,9 +152,10 @@ def grab_botguy():
 
 
 def collect_poms():
-    spin(40, 87)
+    drive_timed(-20, 20, pc(1650, 1570))
     msleep(500)
     drive_until_black(pc(-30, -30))
+    msleep(7000)
     # if c.IS_PRIME:
     #     spin(-40, pc(79, 90))  # was 83 for prime and was 86 for clone
     # if c.IS_CLONE:
@@ -166,16 +168,23 @@ def collect_poms():
 
     spin_to_white_2(-3)
 
-    spin(-3, pc(8, 1))
+    if c.IS_PRIME:
+        drive_timed(10, -10, 100)
+    else:
+        spin(-3, 1)
+
+    if c.IS_CLONE:
+        servo.move(c.ARM, c.ARM_DOWN + 200)
 
     drive_distance_default(10, pc(5, 5))  # was 3 inches for clone
+
+    if c.IS_CLONE:
+        servo.move(c.ARM, c.ARM_DOWN)
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
-
-    # wait_for_button()
 
     # drive_distance_default(10, pc(2, 0))
     print("picking up pom 1")
@@ -190,8 +199,10 @@ def collect_poms():
     if c.IS_CLONE:
         spin_to_black_2(3)
     else:
-        spin(10, 4)
-
+        spin_to_black_2(3)
+        # wait_for_button()
+        # drive_timed(-10, 10, 450)
+        # wait_for_button()
 
     servo.move(c.ARM, c.ARM_DOWN, 15)
     drive_distance_default(10, pc(4.6, 4.1))  # 5.2
@@ -205,10 +216,10 @@ def collect_poms():
         spin_to_black_2(-3)
 
     # spin_to_white_2(-3)  # the problem
-    spin(-10, pc(8, 25))  # blind spin
+    spin(-10, pc(10, 25))  # blind spin
     servo.move(c.ARM, c.ARM_DOWN, 10)
     print("picking up pom 3")
-    drive_distance_default(10, pc(5.2, 4.8))  # prime was 5.2
+    drive_distance_default(10, pc(5.2, 5.0))  # prime was 5.2
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
@@ -216,11 +227,14 @@ def collect_poms():
     if not on_white():
         print("crossed the line! on black 3")
         spin_to_white_2(-3)
+
     spin_to_black_2(3)
+
     if c.IS_CLONE:
         spin_to_white_2(-3)
     else:
-        spin(-10, 6)
+        # spin(-10, 3) # 6
+        drive_timed(10, -10, 125)
 
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(10, pc(4.5, 4.4))  # slightly shorter drive
@@ -236,7 +250,7 @@ def collect_poms():
     #     spin_to_white_2(-3)
 
     spin_to_white_2(-3)
-    spin(-10, pc(6, 0))
+    drive_timed(10, -10, 200)
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(10, pc(5.5, 4.4))
     print("picking up pom 5")
@@ -252,7 +266,7 @@ def collect_poms():
 
     spin_to_black_2(3)
     spin_to_white_2(-3)
-    spin(-10, pc(6, 0))  # used to be spin(-5, 7), 3rd green pom, longer now
+    # drive_timed(10, -10, 125)  # used to be spin(-5, 7), 3rd green pom, longer now # 6
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(10, pc(4.5, 4.5))
     print("picking up pom 6")
@@ -267,7 +281,7 @@ def collect_poms():
     #     spin_to_white_2(-3)
 
     spin_to_white_2(-3)
-    spin(-10, pc(6, 0))
+    spin(-10, pc(3, 0))
     servo.move(c.ARM, c.ARM_DOWN, 10)
     drive_distance_default(10, pc(5.5, 4.8))
     print("picking up pom 7")
@@ -282,11 +296,11 @@ def collect_poms():
         spin_to_black_2(3)
 
     spin_to_black_2(3)
-    spin_to_white_2(-3)
-    spin(-10, pc(6, 0))
+    # drive_timed(10, -10, 200)
+
     servo.move(c.ARM, c.ARM_DOWN, 10)
 
-    drive_distance_default(10, pc(3.5, 2.8))
+    drive_distance_default(10, pc(3.5, 2.6))
 
     print("picking up pom 8")
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED + 170)
@@ -326,26 +340,27 @@ def deliver_poms_to_transporter():
 def deliver_poms_to_airlock():
     drive_straight(-60, 60)
     spin(40, 90)
-    msleep(10000)
-    drive_straight(30, 25)
+    # msleep(10000)
+    # drive_straight(30, 22)
+    drive_distance_default(30, 23)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
-    drive_straight(-40, 6)
+    drive_straight(-40, pc(4, 6))
 
     spin(25, 90)
     msleep(500)
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH, 15)
 
-    drive_straight(30, pc(15, 15))
+    drive_straight(40, pc(15, 15))
     msleep(500)
     spin(-10, 15)
     msleep(500)
     spin(10, 15)
     msleep(500)
-    drive_straight(-20, pc(13, 15))
+    drive_straight(-20, pc(12, 15))
     spin(-10, 8)
-    servo.move(c.ARM, c.ARM_DELIVER_HIGH - pc(0, 30), 10)
-    servo.move(c.WRIST, c.WRIST_DELIVER_HIGH - pc(0,60))
-    drive_straight(10, pc(10, 12))
+    servo.move(c.ARM, c.ARM_DELIVER_HIGH - pc(30, 30), 10)  # was 0
+    servo.move(c.WRIST, c.WRIST_DELIVER_HIGH - pc(30, 60))  # was 0
+    drive_distance_default(10, pc(7, 12))
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
     spin(-10, 3)
