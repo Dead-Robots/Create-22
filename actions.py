@@ -152,9 +152,9 @@ def grab_botguy():
 
 
 def collect_poms():
-    drive_timed(-20, 20, pc(1650, 1570))
+    drive_timed(-20, 20, pc(1650, 1400))
     msleep(500)
-    drive_until_black(pc(-30, -30))
+    drive_until_black(-30)
     msleep(7000)
     # if c.IS_PRIME:
     #     spin(-40, pc(79, 90))  # was 83 for prime and was 86 for clone
@@ -174,9 +174,9 @@ def collect_poms():
         spin(-3, 1)
 
     if c.IS_CLONE:
-        servo.move(c.ARM, c.ARM_DOWN + 200)
+        servo.move(c.ARM, c.ARM_DOWN + 50)
 
-    drive_distance_default(10, pc(5, 5))  # was 3 inches for clone
+    drive_distance_default(10, pc(5.8, 5))  # was 3 inches for clone
 
     if c.IS_CLONE:
         servo.move(c.ARM, c.ARM_DOWN)
@@ -197,29 +197,29 @@ def collect_poms():
         spin_to_white_2(-3)
 
     if c.IS_CLONE:
+        servo.move(c.ARM, c.ARM_DOWN + pc(100, 75), 10)
         spin_to_black_2(3)
+        spin_to_white_2(-3)
     else:
         spin_to_black_2(3)
+        spin_to_white_2(-3)
+        wait_for_button()
         # wait_for_button()
         # drive_timed(-10, 10, 450)
         # wait_for_button()
 
-    servo.move(c.ARM, c.ARM_DOWN, 15)
-    drive_distance_default(10, pc(4.6, 4.1))  # 5.2
+    drive_distance_default(10, pc(4.3, 4.1))  # 5.2
     print("picking up pom 2")
+    servo.move(c.ARM, c.ARM_DOWN, 15)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
 
-    if on_white():
-        print("crossed the line! on white 2")
-        spin_to_black_2(-3)
-
     # spin_to_white_2(-3)  # the problem
-    spin(-10, pc(10, 25))  # blind spin
+    spin(-10, pc(10, 7))  # blind spin
     servo.move(c.ARM, c.ARM_DOWN, 10)
     print("picking up pom 3")
-    drive_distance_default(10, pc(5.2, 5.0))  # prime was 5.2
+    drive_distance_default(10, pc(4.6, 5.0))  # prime was 5.2
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
     servo.move(c.ARM, c.ARM_DOWN + pc(100, 50), 10)
@@ -231,7 +231,8 @@ def collect_poms():
     spin_to_black_2(3)
 
     if c.IS_CLONE:
-        spin_to_white_2(-3)
+        # spin_to_white_2(-3)
+        drive_timed(10, -10, 125)
     else:
         # spin(-10, 3) # 6
         drive_timed(10, -10, 125)
@@ -250,9 +251,9 @@ def collect_poms():
     #     spin_to_white_2(-3)
 
     spin_to_white_2(-3)
-    drive_timed(10, -10, 200)
+    drive_timed(10, -10, pc(200, 0))
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(10, pc(5.5, 4.4))
+    drive_distance_default(10, pc(5.2, 4.4))
     print("picking up pom 5")
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
@@ -283,7 +284,7 @@ def collect_poms():
     spin_to_white_2(-3)
     spin(-10, pc(3, 0))
     servo.move(c.ARM, c.ARM_DOWN, 10)
-    drive_distance_default(10, pc(5.5, 4.8))
+    drive_distance_default(10, pc(5.2, 4.8))
     print("picking up pom 7")
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED - 170)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
@@ -300,7 +301,7 @@ def collect_poms():
 
     servo.move(c.ARM, c.ARM_DOWN, 10)
 
-    drive_distance_default(10, pc(3.5, 2.6))
+    drive_distance_default(10, pc(3.1, 2.9))
 
     print("picking up pom 8")
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED + 170)
@@ -339,47 +340,51 @@ def deliver_poms_to_transporter():
 
 def deliver_poms_to_airlock():
     drive_straight(-60, 60)
-    spin(40, 90)
-    # msleep(10000)
+    # spin(40, 90)
+    drive_timed(-20, 20, pc(1520, 1400))
     # drive_straight(30, 22)
     drive_distance_default(30, 23)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
-    drive_straight(-40, pc(4, 6))
+    drive_straight(-40, pc(5, 4.6))
 
     spin(25, 90)
     msleep(500)
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH, 15)
 
-    drive_straight(40, pc(15, 15))
+    drive_straight(40, pc(13.5, 13))
     msleep(500)
     spin(-10, 15)
     msleep(500)
     spin(10, 15)
     msleep(500)
-    drive_straight(-20, pc(12, 15))
+    drive_distance_default(-10, pc(7, 10))  # FIND PRIME VALUE
     spin(-10, 8)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH - pc(30, 30), 10)  # was 0
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH - pc(30, 60))  # was 0
-    drive_distance_default(10, pc(7, 12))
+    drive_distance_default(10, pc(7, 9))
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
-    spin(-10, 3)
+    # spin(-10, 3)
+    drive_timed(10, -10, 125)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN, 15)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN, 15)
 
-    spin(3, 5)
+    # spin(3, 5)
+    drive_timed(-10, 10, 90)
     for x in range(0):
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN)
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     msleep(500)
     disable_servo(c.LEFT_WIPER)
-    spin(-3, 5)
+    # spin(-3, 5)
+    drive_timed(10, -10, 90)
     for x in range(0):
         servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN)
         servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     msleep(500)
     disable_servo(c.RIGHT_WIPER)
-    spin(3, 3)
+    # spin(3, 3)
+    drive_timed(-10, 10, 90)
     servo.move(c.ARM, c.ARM_DELIVER_FINAL - 100, 10)  # places the arm completely down on the airlock
 
 
