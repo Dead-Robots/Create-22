@@ -5,11 +5,12 @@ import math
 from kipr import *
 from time import time, sleep
 import constants as c
+import utilities as u
 from createserial.commands import create_dd
 from createserial.encoders import Encoders
 
 import actions as a
-from sensors import read_cliffs
+from sensors import read_cliffs, on_white
 
 GYRO_OFFSET = 0
 
@@ -19,16 +20,11 @@ def drive(l_speed: int, r_speed: int):
     create_dd(r_speed * -5, (int(l_speed * -5 * c.ADJUST_SPEED)))
 
 
-def stop():
-    """Stops robot"""
-    drive(0, 0)
-
-
 def drive_timed(l_speed: int, r_speed: int, drive_time: int):
     """Drives left and right for time milliseconds and motor values between -100 and 100"""
     drive(l_speed, r_speed)
     msleep(drive_time)
-    stop()
+    u.stop()
 
 
 def drive_distance_default(speed: int, distance: float):
@@ -67,7 +63,7 @@ def drive_distance_straight(speed: int, distance: float):
             l_speed += 1
         else:
             r_speed = l_speed = speed
-    stop()
+    u.stop()
 
 
 def drive_distance_straight_2(speed: int, distance):
@@ -87,7 +83,7 @@ def drive_distance_straight_2(speed: int, distance):
         else:
             r_speed = l_speed = speed
         msleep(10)
-    stop()
+    u.stop()
 
 
 def pivot(speed, angle, stationary_wheel):
@@ -124,8 +120,6 @@ def spin(speed, angle):
         create_dd(-l_speed, r_speed)
         # print("in loop", left, right, inches, l_speed, r_speed, arc_length)
     drive(0, 0)
-
-
 
 
 def spin_to_black(speed):
@@ -174,15 +168,7 @@ def drive_until_black(speed):
     drive(0, 0)
 
 
-def on_white():
-    if analog_et(0) < c.TOPHAT_THRESHOLD:
-        return True
-    else:
-        return False
-
-
 # encoder values to inches: n * (math.pi * 72 / 508.8) / 24.5 where n equals encoder values
-
 def drive_straight(speed, distance: float):
     p = 0.25  # was p = 0.30
     i = 0.05  # was i = 0.05

@@ -98,28 +98,7 @@ def collect_and_deliver_cubes():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
 
 
-def debug():
-    stop()
-    msleep(1000)
 
-    # Terminate communications with the Create
-    close_create()
-
-    # Close serial port connection to the Create
-    close_serial()
-
-    print("exited")
-    exit(0)
-
-
-def pc(p_value, c_value):
-    return p_value if c.IS_PRIME else c_value
-
-
-def wait_for_button():
-    print("push button to continue")
-    while not push_button():
-        pass
 
 
 def leave_start_box():

@@ -3,10 +3,19 @@ from createserial.commands import read_cliff_signals
 import constants as c
 import actions as a
 
+
 def read_cliffs():
     right_cliff_sig, left_cliff_sig = read_cliff_signals()
     print("Right: ", right_cliff_sig, "Left: ", left_cliff_sig)
     return right_cliff_sig, left_cliff_sig
+
+
+def on_white():
+    if analog_et(0) < c.TOPHAT_THRESHOLD:
+        return True
+    else:
+        return False
+
 
 def calibrate(port):
     print("Press button with light on")
