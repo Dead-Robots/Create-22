@@ -113,11 +113,11 @@ def spin(speed, angle):
     left = -1 * left
     r_speed = l_speed = speed * 5
     inches = 0
+    create_dd(-l_speed, r_speed)
     while abs(inches) < abs(arc_length):
-        msleep(15)
+        # msleep(15)
         left, right = encoders.values
         inches = abs(right) * ((math.pi * 72 / 508.8) / 24.5)  # + (abs(left) * (math.pi * 72 / 508.8) / 24.5)
-        create_dd(-l_speed, r_speed)
         # print("in loop", left, right, inches, l_speed, r_speed, arc_length)
     drive(0, 0)
 
@@ -161,10 +161,34 @@ def spin_to_white_2(speed):
 
 
 def drive_until_black(speed):
-    drive(int(speed * 0.85), speed)  # 0.85 same for prime and clone?
+    drive(speed, speed)  # 0.85 same for prime and clone?
     rCliff, lCliff = read_cliffs()
     while rCliff > 1500 and lCliff > 1000:
         rCliff, lCliff = read_cliffs()
+    drive(0, 0)
+
+
+def drive_with_line_follow(speed, distance):
+    encoders = Encoders()
+    right, left = encoders.values
+    right = -1 * right
+    left = -1 * left
+    r_speed = l_speed = speed
+    inches = 0
+    create_dd(r_speed * -5, l_speed * -5)
+    while abs(inches) < abs(distance):
+        sensor_value = analog12(c.TOP_HAT)
+        print(sensor_value)
+        if sensor_value >= 1700:
+            create_dd(((r_speed - 3) * -5), l_speed * -5)
+        elif 900 < sensor_value < 1700:
+            create_dd(r_speed * -5, l_speed * -5)
+        else:
+            create_dd(r_speed * -5, (l_speed - 3) * -5)
+        right, left = encoders.values
+        right = -1 * right
+        left = -1 * left
+        inches = 0.5 * ((right * (math.pi * 72 / 508.8) / 24.5) + (left * (math.pi * 72 / 508.8) / 24.5))
     drive(0, 0)
 
 
@@ -181,7 +205,7 @@ def drive_straight(speed, distance: float):
     inches = 0
     create_dd(r_speed * -5, int(l_speed * -5 * c.ADJUST_SPEED))
     while abs(inches) < abs(distance):
-        msleep(15)
+        # msleep(15)
         right, left = encoders.values
         right = -1 * right
         left = -1 * left

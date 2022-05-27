@@ -1,4 +1,4 @@
-from kipr import analog, push_button, msleep
+from kipr import analog, push_button, msleep, analog_et
 from createserial.commands import read_cliff_signals
 import constants as c
 import actions as a

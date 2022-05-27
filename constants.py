@@ -6,18 +6,18 @@ IS_CLONE = not IS_PRIME
 START_LIGHT = 1
 START_LIGHT_THRESHOLD = 0
 
+# Servo Ports
+ARM = 0
+WRIST = 1
+RIGHT_WIPER = 2
+LEFT_WIPER = 3
+
+TOP_HAT = 0
+
 if IS_PRIME:
     print("I am prime")
 
     ADJUST_SPEED = 1.0
-
-    # Servo Ports
-    ARM = 0
-    WRIST = 1
-    RIGHT_WIPER = 2
-    LEFT_WIPER = 3
-
-    # Motor Ports
 
     # Servo Positions
     ARM_INIT = 1390
@@ -57,12 +57,6 @@ elif IS_CLONE:
     print("I am clone")
 
     ADJUST_SPEED = 1.0  # Factor for left motor in drive function
-
-    # Servo Ports
-    ARM = 0
-    WRIST = 1
-    RIGHT_WIPER = 2
-    LEFT_WIPER = 3
 
     # Servo Positions
     ARM_BOTGUY = 2047

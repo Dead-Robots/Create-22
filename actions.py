@@ -1,10 +1,11 @@
 import time
 from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog, analog_et
 import constants as c
-from drive import drive_timed, stop, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
-    spin_to_white, drive, drive_distance_default, on_white, spin_to_white_2, spin_to_black_2
+from drive import drive_timed, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
+    spin_to_white, drive, drive_distance_default, on_white, spin_to_white_2, spin_to_black_2, drive_with_line_follow
 import servo
 from sensors import read_cliffs, wait_4_light
+from utilities import stop, pc, debug, wait_for_button
 
 from createserial.commands import open_create, close_create, reset_create
 from createserial.serial import open_serial, close_serial
@@ -40,6 +41,8 @@ def init():
     servo.move(c.WRIST, c.WRIST_POM)
     servo.move(c.ARM, c.ARM_DOWN)
 
+    test_line_follow()
+
     # wait_for_button()
     wait_4_light()
 
@@ -47,6 +50,13 @@ def init():
     t = time.time()
 
     shutdown_create_in(119)
+
+
+def test_line_follow():
+    wait_for_button()
+    servo.move(c.ARM, c.ARM_DOWN+100)
+    drive_with_line_follow(10, 24)
+    wait_for_button()
 
 
 def power_on_self_test():
@@ -98,9 +108,6 @@ def collect_and_deliver_cubes():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
 
 
-
-
-
 def leave_start_box():
     servo.move(c.ARM, c.ARM_BOTGUY)
     servo.move(c.WRIST, c.WRIST_UP)
@@ -131,7 +138,8 @@ def grab_botguy():
 
 
 def collect_poms():
-    drive_timed(-20, 20, pc(1650, 1400))
+    # drive_timed(-20, 20, pc(1650, 1400))
+    spin(30, 90)
     msleep(500)
     drive_until_black(-30)
     msleep(7000)
@@ -182,7 +190,6 @@ def collect_poms():
     else:
         spin_to_black_2(3)
         spin_to_white_2(-3)
-        wait_for_button()
         # wait_for_button()
         # drive_timed(-10, 10, 450)
         # wait_for_button()
