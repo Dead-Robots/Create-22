@@ -161,12 +161,40 @@ def spin_to_white_2(speed):
 
 
 def drive_until_black(speed):
-    drive(speed, speed)  # 0.85 same for prime and clone?
+    drive(speed, int(speed*0.80))  # 0.85 same for prime and clone?
     rCliff, lCliff = read_cliffs()
     while rCliff > 1500 and lCliff > 1000:
         rCliff, lCliff = read_cliffs()
     drive(0, 0)
 
+
+def drive_until_white(speed):
+    drive(speed, int(speed*0.80))  # 0.85 same for prime and clone?
+    rCliff, lCliff = read_cliffs()
+    while rCliff < 1500 and lCliff < 1000:
+        rCliff, lCliff = read_cliffs()
+    drive(0, 0)
+
+
+def arc_to_black(speed, direction):
+    if direction == "r":
+        l_speed = int(speed / 8)
+        r_speed = speed
+    if direction == "l":
+        l_speed = speed
+        r_speed = int(speed / 8)
+    drive(l_speed, r_speed)
+    while True:
+        rCliff, lCliff = read_cliffs()
+        if rCliff < 1500:
+            r_speed = 0
+            drive(l_speed, r_speed)
+        if lCliff < 1500:
+            l_speed = 0
+            drive(l_speed, r_speed)
+        if l_speed == 0 and r_speed == 0:
+            break
+    drive(0, 0)
 
 def drive_with_line_follow(speed, distance):
     encoders = Encoders()
@@ -179,12 +207,26 @@ def drive_with_line_follow(speed, distance):
     while abs(inches) < abs(distance):
         sensor_value = analog12(c.TOP_HAT)
         print(sensor_value)
-        if sensor_value >= 1700:
-            create_dd(((r_speed - 3) * -5), l_speed * -5)
-        elif 900 < sensor_value < 1700:
+        # if sensor_value >= 1700:
+        #     create_dd(((r_speed - 3) * -5), l_speed * -5)
+        # elif 900 < sensor_value < 1700:
+        #     create_dd(r_speed * -5, l_speed * -5)
+        # else:
+        #     create_dd(r_speed * -5, (l_speed - 3) * -5)
+
+        val_difference = round((1050 - sensor_value) / 200)
+        print(val_difference)
+        if 700 < sensor_value < 1400:
+            # print("go straight")
             create_dd(r_speed * -5, l_speed * -5)
         else:
-            create_dd(r_speed * -5, (l_speed - 3) * -5)
+            if val_difference > 0:
+                create_dd(r_speed * -5, int(l_speed - val_difference) * -5)
+                # print("speed: ", int(l_speed - val_difference) * -5, "turn left")
+            else:
+                create_dd((int(r_speed - abs(val_difference)) * -5), l_speed * -5)
+                # print("speed: ", (int(r_speed - abs(val_difference)) * -5), "turn right")
+
         right, left = encoders.values
         right = -1 * right
         left = -1 * left
