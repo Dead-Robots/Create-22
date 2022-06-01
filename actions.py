@@ -125,8 +125,9 @@ def leave_start_box():
     drive_distance_default(-30, 5.5)
     arc_to_black(-50, "l")
     servo.move(c.WRIST, c.WRIST_UP - 100)
+    print("going to knock off botguy")
     spin(-15, 360)
-    drive_until_black(50)
+    drive_until_black(50)   #need to change direction since spin direction changed
     msleep(200)
     drive_distance_default(-40, 15)
     arc_to_black(-50, "r")

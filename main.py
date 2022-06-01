@@ -6,6 +6,8 @@ import drive as d
 from createserial.commands import open_create
 from createserial.serial import open_serial
 
+import utilities
+
 
 def main():
     a.init()
