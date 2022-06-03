@@ -196,7 +196,7 @@ def arc_to_black(speed, direction):
             break
     drive(0, 0)
 
-def drive_with_line_follow(speed, distance):
+def drive_with_line_follow(speed, distance):#distance is in inches
     encoders = Encoders()
     right, left = encoders.values
     right = -1 * right

@@ -1,5 +1,5 @@
 import time
-from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog, analog_et
+from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog, analog_et, motor, motor_power
 import constants as c
 from drive import drive_timed, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
     spin_to_white, drive, drive_distance_default, on_white, spin_to_white_2, spin_to_black_2, drive_with_line_follow, arc_to_black, drive_until_white
@@ -88,6 +88,12 @@ def power_on_self_test():
 
     print("driving forward (+)")
     drive_straight(35, 6)
+
+    print("moving hook")
+    motor(3, 40)
+    msleep(1000)
+    motor_power(3, 0)
+
     print("driving backward (-)")
     drive_straight(-35, 6)
     print("finished power on self test!")
@@ -95,7 +101,7 @@ def power_on_self_test():
 
 def collect_and_deliver_cubes():
     print("collect_and_deliver_cubes")
-    drive_straight(5, pc(1.25, 2.5))  # was 1 inch last time
+    drive_straight(5, 1.25)  # was 1 inch last time
     msleep(250)
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CUBES)
@@ -110,7 +116,7 @@ def collect_and_deliver_cubes():
 def leave_start_box():
     print("leave_start_box")
     servo.move(c.ARM, c.ARM_BOTGUY)
-    servo.move(c.WRIST, c.WRIST_UP)
+    servo.move(c.WRIST, c.WRIST_SPIN_UP)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
@@ -122,17 +128,33 @@ def leave_start_box():
     drive_straight(-60, 46)
     arc_to_black(-50, "l")
     msleep(200)
-    drive_distance_default(-30, 5.5)
+    drive_distance_default(-30, 6.5)
     arc_to_black(-50, "l")
-    servo.move(c.WRIST, c.WRIST_UP - 100)
+    wait_for_button()
+    motor(3, 25)
+    msleep(1000)
+    motor(3, 5)
+    msleep(6000)
     print("going to knock off botguy")
     spin(-15, 360)
-    drive_until_black(50)   #need to change direction since spin direction changed
+    motor_power(3, 0)
+    wait_for_button()
+    drive_until_black(-50)
     msleep(200)
-    drive_distance_default(-40, 15)
-    arc_to_black(-50, "r")
-    drive_until_white(-50)
-    spin(40, 90)
+    wait_for_button()
+    drive_distance_default(40, 15)
+    arc_to_black(25, "l")
+    #drive_until_white(10)
+
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
+    servo.move(c.WRIST, c.WRIST_POM + 50)
+    servo.move(c.ARM, c.ARM_DOWN + 25)  # lift higher, so wrist doesn't get snagged on the tape?
+
+    spin_to_black_2(-10)
+    spin_to_white_2(-10)
+    # spin(-10, 90)
+    wait_for_button()
 
     # drive_straight(-60, 60)
 
@@ -155,7 +177,6 @@ def grab_botguy():
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
     servo.move(c.WRIST, c.WRIST_BOTGUY)
     spin(-25, 15)
-    debug()
 
 
 def collect_poms():
@@ -333,13 +354,10 @@ def collect_poms():
 def collect_poms_new():
     print("collect_poms")
 
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-    servo.move(c.WRIST, c.WRIST_POM + 50)
-    servo.move(c.ARM, c.ARM_DOWN + 25)  # lift higher, so wrist doesn't get snagged on the tape?
-
-    spin_to_black_2(-10)
-    spin_to_white_2(-3)
+    # spin_to_black_2(-10)
+    # spin_to_white_2(-3)
+    drive_with_line_follow(40, 8)
+    wait_for_button()
 
     msleep(200)
 
@@ -479,6 +497,7 @@ def shut_down():
     # Close serial port connection to the Create
     close_serial()
     print("shut down", time.time() - t)
+    exit(0)
 
 
 '''

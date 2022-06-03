@@ -13,7 +13,7 @@ def main():
     a.init()
     a.collect_and_deliver_cubes()
     a.leave_start_box()
-    a.grab_botguy()
+    # a.grab_botguy()
     a.collect_poms_new()
     # a.deliver_poms_to_transporter()
     a.deliver_poms_to_airlock()
