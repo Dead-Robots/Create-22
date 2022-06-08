@@ -77,7 +77,7 @@ elif IS_CLONE:
     WRIST_DRIVE_UP = 525  # value for wrist to pe perpendicular to ground when driving
     WRIST_SPIN_UP = 650
 
-    LEFT_WIPER_CLOSED = 175
+    LEFT_WIPER_CLOSED = 0
     LEFT_WIPER_CENTER = 425
     LEFT_WIPER_OPEN = 950
     LEFT_WIPER_CUBES = 1000 + 100

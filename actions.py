@@ -1,8 +1,10 @@
 import time
-from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog, analog_et, motor, motor_power
+from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog, analog_et, \
+    motor, motor_power
 import constants as c
 from drive import drive_timed, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
-    spin_to_white, drive, drive_distance_default, on_white, spin_to_white_2, spin_to_black_2, drive_with_line_follow, arc_to_black, drive_until_white
+    spin_to_white, drive, drive_distance_default, on_white, spin_to_white_2, spin_to_black_2, drive_with_line_follow, \
+    arc_to_black, drive_until_white, drive_until_black_square
 import servo
 from sensors import read_cliffs, wait_4_light
 from utilities import stop, pc, debug, wait_for_button
@@ -52,7 +54,7 @@ def init():
 
 def test_line_follow():
     wait_for_button()
-    servo.move(c.ARM, c.ARM_DOWN+100)
+    servo.move(c.ARM, c.ARM_DOWN + 100)
     drive_with_line_follow(10, 24)
     wait_for_button()
 
@@ -90,9 +92,9 @@ def power_on_self_test():
     drive_straight(35, 6)
 
     print("moving hook")
-    motor(3, 40)
-    msleep(1000)
-    motor_power(3, 0)
+    # motor(3, 40)
+    # msleep(1000)
+    # motor_power(3, 0)
 
     print("driving backward (-)")
     drive_straight(-35, 6)
@@ -125,42 +127,41 @@ def leave_start_box():
 
     msleep(250)
 
-    drive_straight(-60, 46)
-    arc_to_black(-50, "l")
-    msleep(200)
-    drive_distance_default(-30, 6.5)
-    arc_to_black(-50, "l")
-    wait_for_button()
+    drive_straight(-60, 44.5) # was 46
+    print("bringing hook to claw")
     motor(3, 25)
-    msleep(1000)
-    motor(3, 5)
-    msleep(6000)
-    print("going to knock off botguy")
-    spin(-15, 360)
-    motor_power(3, 0)
-    wait_for_button()
-    drive_until_black(-50)
+    msleep(2000)
+    motor(3, 0)
+    arc_to_black(-50, "l")
     msleep(200)
-    wait_for_button()
-    drive_distance_default(40, 15)
-    arc_to_black(25, "l")
-    #drive_until_white(10)
-
+    drive_distance_default(-30, 6)  # was 6.5
+    print("part to check")
+    arc_to_black(-50, "l")
+    # motor(3, 25)
+    # msleep(1000)
+    # motor(3, 5)
+    # msleep(6000)
+    print("going to knock off botguy")
+    print("bringing hook to swipe position")
+    motor(3, -25)
+    msleep(2000)
+    motor(3, 0)
+    print("spinning")
+    spin(-10, 180)  # was 360, 15
+    # motor_power(3, 0)
+    drive_distance_default(-30, 18)
+    spin(-20, 90)
+    drive_until_black_square(-20)
+    drive_distance_default(-20, 1.5)
+    msleep(200)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM + 50)
     servo.move(c.ARM, c.ARM_DOWN + 25)  # lift higher, so wrist doesn't get snagged on the tape?
+    spin_to_black_2(10)
 
-    spin_to_black_2(-10)
-    spin_to_white_2(-10)
-    # spin(-10, 90)
-    wait_for_button()
-
-    # drive_straight(-60, 60)
-
-    # spin(30, 90)
-    # msleep(500)
-    # drive_until_black(-40)
+    print("line following!")
+    drive_with_line_follow(20, 5)
 
 
 def grab_botguy():
@@ -356,19 +357,20 @@ def collect_poms_new():
 
     # spin_to_black_2(-10)
     # spin_to_white_2(-3)
-    drive_with_line_follow(40, 8)
-    wait_for_button()
+    # drive_with_line_follow(40, 8)
+    # wait_for_button()
 
     msleep(200)
 
     print("picking up pom 1")
     # spin(-10, 5)
-    drive_distance_default(10, 5.5)
+    drive_distance_default(10, 3.5)
+    wait_for_button()
     collect_red_pom()
 
     print("picking up pom 2")
-    spin(10, 5)
-    drive_distance_default(10, 4.5)
+    spin(-10, 5) # was positive
+    drive_distance_default(10, 3.5)
     collect_green_pom()
 
     print("picking up pom 3")

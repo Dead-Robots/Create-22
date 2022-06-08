@@ -1,3 +1,4 @@
+import time
 from kipr import msleep, push_button
 import constants as c
 

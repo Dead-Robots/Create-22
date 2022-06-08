@@ -161,15 +161,30 @@ def spin_to_white_2(speed):
 
 
 def drive_until_black(speed):
-    drive(speed, int(speed*0.80))  # 0.85 same for prime and clone?
+    drive(speed, int(speed * 0.80))  # 0.85 same for prime and clone?
     rCliff, lCliff = read_cliffs()
     while rCliff > 1500 and lCliff > 1000:
         rCliff, lCliff = read_cliffs()
     drive(0, 0)
 
 
+def drive_until_black_square(speed):
+    drive(speed, int(speed * 0.80))  # 0.85 same for prime and clone?
+    l_speed = r_speed = speed
+    while True:
+        rCliff, lCliff = read_cliffs()
+        if rCliff < 1500:
+            r_speed = 0
+            drive(l_speed, r_speed)
+        if lCliff < 1500:
+            l_speed = 0
+            drive(l_speed, r_speed)
+        if l_speed == 0 and r_speed == 0:
+            break
+
+
 def drive_until_white(speed):
-    drive(speed, int(speed*0.80))  # 0.85 same for prime and clone?
+    drive(speed, int(speed * 0.80))  # 0.85 same for prime and clone?
     rCliff, lCliff = read_cliffs()
     while rCliff < 1500 and lCliff < 1000:
         rCliff, lCliff = read_cliffs()
@@ -196,7 +211,8 @@ def arc_to_black(speed, direction):
             break
     drive(0, 0)
 
-def drive_with_line_follow(speed, distance):#distance is in inches
+
+def drive_with_line_follow(speed, distance):  # distance is in inches
     encoders = Encoders()
     right, left = encoders.values
     right = -1 * right
