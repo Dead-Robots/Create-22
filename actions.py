@@ -20,36 +20,22 @@ t = 0
 def init():
     print("resetting create...")
     open_serial()  # Open a serial port connection to the Create
-    # reset_create()
+    reset_create()
     print("initializing...")
     open_create()  # Initialize the Create
 
-    # calibrate_gyro()
-
-    enable_servo(c.WRIST)
-    servo.move(c.WRIST, c.WRIST_START)
-    enable_servo(c.ARM)
-    servo.move(c.ARM, c.ARM_DOWN)
-    enable_servo(c.RIGHT_WIPER)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
-    enable_servo(c.LEFT_WIPER)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-
     power_on_self_test()
 
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    motor_power(c.BOT_STICK, 50)
+    msleep(200)
+    motor_power(c.BOT_STICK, 5)  # hold bot stick above cubes to start
 
-    servo.move(c.WRIST, c.WRIST_POM)
-    servo.move(c.ARM, c.ARM_DOWN)
-
-    # wait_for_button()
     wait_4_light(True)
 
     global t
     t = time.time()
 
-    shutdown_create_in(119)
+    # shutdown_create_in(119)
 
 
 def test_line_follow():
@@ -61,6 +47,21 @@ def test_line_follow():
 
 def power_on_self_test():
     print("starting power on self test")
+
+    print("moving hook")
+    motor_power(c.BOT_STICK, 50)
+    msleep(2000)
+    motor_power(c.BOT_STICK, 0)
+
+    enable_servo(c.WRIST)
+    servo.move(c.WRIST, c.WRIST_START)
+    enable_servo(c.ARM)
+    servo.move(c.ARM, c.ARM_DOWN)
+    enable_servo(c.RIGHT_WIPER)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    enable_servo(c.LEFT_WIPER)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+
     print("testing white")
     if analog(0) < c.TOPHAT_THRESHOLD:
         print("I see white.")
@@ -88,21 +89,31 @@ def power_on_self_test():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN, 25)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED, 25)
 
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+
+    servo.move(c.WRIST, c.WRIST_POM)
+    servo.move(c.ARM, c.ARM_DOWN)
+
     print("driving forward (+)")
     drive_straight(35, 6)
-
-    print("moving hook")
-    # motor(3, 40)
-    # msleep(1000)
-    # motor_power(3, 0)
 
     print("driving backward (-)")
     drive_straight(-35, 6)
     print("finished power on self test!")
 
+    motor_power(c.BOT_STICK, -50)
+    msleep(2000)
+    motor_power(c.BOT_STICK, 0)
+
 
 def collect_and_deliver_cubes():
     print("collect_and_deliver_cubes")
+
+    motor_power(c.BOT_STICK, 50)
+    msleep(2000)
+    motor_power(c.BOT_STICK, 0)
+
     drive_straight(5, 1.25)  # was 1 inch last time
     msleep(250)
 
@@ -129,39 +140,39 @@ def leave_start_box():
 
     drive_straight(-60, 44.5) # was 46
     print("bringing hook to claw")
-    motor(3, 25)
+    motor_power(c.BOT_STICK, -25)
     msleep(2000)
-    motor(3, 0)
+    motor_power(c.BOT_STICK, 0)
     arc_to_black(-50, "l")
     msleep(200)
     drive_distance_default(-30, 6)  # was 6.5
     print("part to check")
-    arc_to_black(-50, "l")
-    # motor(3, 25)
-    # msleep(1000)
-    # motor(3, 5)
-    # msleep(6000)
+    arc_to_black(-30, "l")
+
     print("going to knock off botguy")
     print("bringing hook to swipe position")
-    motor(3, -25)
+    motor_power(c.BOT_STICK, 25)
     msleep(2000)
-    motor(3, 0)
+    motor_power(c.BOT_STICK, 0)
     print("spinning")
-    spin(-10, 180)  # was 360, 15
-    # motor_power(3, 0)
+    spin(-35, 180)  # was 360, 15
     drive_distance_default(-30, 18)
     spin(-20, 90)
     drive_until_black_square(-20)
     drive_distance_default(-20, 1.5)
     msleep(200)
+    spin(30, 45)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM + 50)
     servo.move(c.ARM, c.ARM_DOWN + 25)  # lift higher, so wrist doesn't get snagged on the tape?
+    msleep(500)
     spin_to_black_2(10)
 
+    wait_for_button()
+    # spin(30, 90)
     print("line following!")
-    drive_with_line_follow(20, 5)
+    drive_with_line_follow(20, 5.5)
 
 
 def grab_botguy():
@@ -177,7 +188,7 @@ def grab_botguy():
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CENTER)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CENTER)
     servo.move(c.WRIST, c.WRIST_BOTGUY)
-    spin(-25, 15)
+    spin(25, 15)
 
 
 def collect_poms():
@@ -364,7 +375,7 @@ def collect_poms_new():
 
     print("picking up pom 1")
     # spin(-10, 5)
-    drive_distance_default(10, 3.5)
+    drive_distance_default(10, 4.5)
     wait_for_button()
     collect_red_pom()
 

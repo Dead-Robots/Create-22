@@ -143,6 +143,7 @@ def spin_to_white(speed):
 def spin_to_black_2(speed):
     r_speed = l_speed = speed * 5
     if analog_et(0) < c.TOPHAT_THRESHOLD:
+        print("on white, spinning to black")
         create_dd(-l_speed, r_speed)  # or drive ?
         while analog_et(0) < c.TOPHAT_THRESHOLD:
             pass
