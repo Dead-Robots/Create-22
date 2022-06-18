@@ -2,10 +2,12 @@ import time
 from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog, analog_et, \
     motor, motor_power
 import constants as c
+import utilities
 from drive import drive_timed, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
     spin_to_white, drive, drive_distance_default, on_white, spin_to_white_2, spin_to_black_2, drive_with_line_follow, \
     arc_to_black, drive_until_white, drive_until_black_square
 import servo
+from motors import move_motor_till_stall
 from sensors import read_cliffs, wait_4_light
 from utilities import stop, pc, debug, wait_for_button
 
@@ -49,9 +51,7 @@ def power_on_self_test():
     print("starting power on self test")
 
     print("moving hook")
-    motor_power(c.BOT_STICK, 50)
-    msleep(2000)
-    motor_power(c.BOT_STICK, 0)
+    move_motor_till_stall(c.BOT_STICK, 50)
 
     enable_servo(c.WRIST)
     servo.move(c.WRIST, c.WRIST_START)
@@ -100,16 +100,12 @@ def power_on_self_test():
     drive_straight(-35, 6)
     print("finished power on self test!")
 
-    motor_power(c.BOT_STICK, -50)
-    msleep(2000)
-    motor_power(c.BOT_STICK, 0)
+    move_motor_till_stall(c.BOT_STICK, -50)
 
 
 def collect_and_deliver_cubes():
     print("collect_and_deliver_cubes")
-    motor_power(c.BOT_STICK, 50)
-    msleep(2000)
-    motor_power(c.BOT_STICK, 0)
+    move_motor_till_stall(c.BOT_STICK, 50)
 
     drive_distance_default(5, 1)
     msleep(250)
@@ -126,6 +122,8 @@ def collect_and_deliver_cubes():
 
 def leave_start_box():
     print("leave_start_box")
+
+    print("leaving the start box")
     servo.move(c.ARM, c.ARM_BOTGUY)
     servo.move(c.WRIST, c.WRIST_UP)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
@@ -136,40 +134,37 @@ def leave_start_box():
 
     msleep(250)
 
-    drive_straight(-60, 44.5) # was 46
-    print("bringing hook to claw")
-    motor_power(c.BOT_STICK, -25)
-    msleep(2000)
-    motor_power(c.BOT_STICK, 0)
-    arc_to_black(-50, "l")
-    msleep(200)
-    drive_distance_default(-30, 4.5)  # was 6.5
-    print("part to check")
-    arc_to_black(-30, "l")
+    drive_straight(-60, 49.5) # was 44.5
+    spin(-50, 75)
+    msleep(250)
 
     print("going to knock off botguy")
-    print("bringing hook to swipe position")
-    motor_power(c.BOT_STICK, 25)
-    msleep(2000)
-    motor_power(c.BOT_STICK, 0)
-    print("spinning")
-    spin(-50, 180)  # was 360, 15
-    drive_distance_default(-30, 18)
-    spin(-20, 90)
-    drive_until_black_square(-20)
-    drive_distance_default(-20, 1.5)
-    msleep(200)
-    spin(30, 45)
+    drive_straight(30, 19.5)  # was 4.5
+    spin(-50, 80)
+    msleep(250)
+    drive_straight(-30, 5)
+
+    print("spinning to knock off botguy")
+    spin(-45, 175)
+    msleep(250)
+
+    print("preparing for picking up poms")
+    drive_straight(-30, 15)
+    spin(-50, 75)
+    msleep(250)
+    drive_until_black_square(-30)
+    drive_straight(-30, 2)
+    msleep(250)
+    spin(50, 45)
+    msleep(250)
+
+    print("beginning of pom pickup")
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
-    servo.move(c.WRIST, c.WRIST_POM)
+    servo.move(c.WRIST, c.WRIST_POM - 25)
     servo.move(c.ARM, c.ARM_DOWN)  # lift higher, so wrist doesn't get snagged on the tape?
     msleep(500)
     spin_to_black_2(10)
-
-    print("line following!")
-    drive_with_line_follow(20, 5.5)
-    msleep(200)
 
 
 def grab_botguy():
@@ -363,13 +358,16 @@ def collect_poms():
 def collect_poms_new():
     print("collect_poms")
 
+    print("line following!")
+    drive_with_line_follow(20, 7)
+    msleep(200)
+
     print("picking up pom 1")
     servo.move(c.ARM, c.ARM_DOWN + 50, 10)
-    drive_distance_default(10, pc(4, 5))
-    collect_red_pom(c.ARM_DOWN, c.WRIST_POM)
+    collect_red_pom(c.ARM_DOWN + 50, c.WRIST_POM) # originally ARM_DOWN + 0
 
     print("picking up pom 2")
-    spin(-10, 5)  # was positive
+    # spin(-10, 5)  # was positive
     servo.move(c.ARM, c.ARM_DOWN + 50, 10)
     drive_distance_default(10, 3.5)
     collect_green_pom(c.ARM_DOWN - 50, c.WRIST_POM)
@@ -397,7 +395,7 @@ def collect_poms_new():
     print("picking up pom 8")
     servo.move(c.ARM, c.ARM_DOWN, 10)
     servo.move(c.WRIST, c.WRIST_POM, 10)
-    drive_with_line_follow(10, 3)
+    drive_with_line_follow(10, 4)
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.ARM, c.ARM_DOWN + 75, 10)
@@ -407,7 +405,7 @@ def collect_poms_new():
     servo.move(c.ARM, c.ARM_BOTGUY)
     servo.move(c.WRIST, c.WRIST_DRIVE_UP, 15)
     spin(-20, 8)
-    drive_distance_default(50, pc(18, 20))
+    drive_distance_default(50, pc(20, 20)) # prime was 18 for distance
 
 
 def collect_red_pom(arm_height, wrist_height):
@@ -445,23 +443,31 @@ def deliver_poms_to_transporter():
 
 
 def deliver_poms_to_airlock():
-    print("deliver_poms_to_airlock")
+    print("deliver poms to airlock")
+
+    print("squaring up create")
     drive_straight(-60, 60)
     drive_timed(-20, 20, pc(1520, 1400))   # spin
-    drive_distance_default(30, 26)
+    drive_distance_default(30, 27)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
-    drive_straight(-40, pc(3, 4.6))
+    wait_for_button()
+    drive_straight(-40, pc(6, 4.6)) # Prime was originally 3
 
-    spin(25, 80)
+    spin(25, 90)
+    wait_for_button()
     msleep(500)
-    servo.move(c.WRIST, c.WRIST_DELIVER_HIGH, 15)
 
-    drive_straight(40, pc(13.5, 13))
-
+    drive_straight(40, pc(24, 13)) # prime was originally 13.5
     msleep(500)
-    spin(-10, 15)
+
+    print("moving airlock to proper position")
+    drive_straight(-40, 3)
+    wait_for_button()
+    spin(-10, 25)
+    wait_for_button()
     msleep(500)
     spin(10, 30)
+    wait_for_button()
     msleep(500)
     drive_distance_default(-10, pc(10, 10))  # FIND PRIME VALUE
     spin(-10, 15)
