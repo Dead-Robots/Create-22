@@ -124,7 +124,7 @@ def leave_start_box():
     print("leave_start_box")
 
     print("leaving the start box")
-    servo.move(c.ARM, c.ARM_BOTGUY)
+    servo.move(c.ARM, c.ARM_MAX)
     servo.move(c.WRIST, c.WRIST_UP)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
@@ -139,7 +139,7 @@ def leave_start_box():
     msleep(250)
 
     print("going to knock off botguy")
-    drive_straight(30, 19.5)  # was 4.5
+    drive_straight(30, 20.5)  # was 19.5
     spin(-50, 80)
     msleep(250)
     drive_straight(-30, 5)
@@ -349,7 +349,7 @@ def collect_poms():
 
     drive_distance_default(-25, 3)
 
-    servo.move(c.ARM, c.ARM_BOTGUY)
+    servo.move(c.ARM, c.ARM_MAX)
     servo.move(c.WRIST, c.WRIST_DRIVE_UP, 15)
     spin(-20, 8)
     drive_distance_default(50, pc(18, 20))
@@ -368,7 +368,7 @@ def collect_poms_new():
 
     print("picking up pom 2")
     # spin(-10, 5)  # was positive
-    servo.move(c.ARM, c.ARM_DOWN + 50, 10)
+    servo.move(c.ARM, c.ARM_DOWN + 75, 10)
     drive_distance_default(10, 3.5)
     collect_green_pom(c.ARM_DOWN - 50, c.WRIST_POM)
 
@@ -395,16 +395,15 @@ def collect_poms_new():
     print("picking up pom 8")
     servo.move(c.ARM, c.ARM_DOWN, 10)
     servo.move(c.WRIST, c.WRIST_POM, 10)
-    drive_with_line_follow(10, 4)
+    drive_with_line_follow(10, 4.5)
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.ARM, c.ARM_DOWN + 75, 10)
 
     drive_distance_default(-25, 3)
 
-    servo.move(c.ARM, c.ARM_BOTGUY)
+    servo.move(c.ARM, c.ARM_MAX)
     servo.move(c.WRIST, c.WRIST_DRIVE_UP, 15)
-    spin(-20, 8)
     drive_distance_default(50, pc(20, 20)) # prime was 18 for distance
 
 
@@ -446,44 +445,63 @@ def deliver_poms_to_airlock():
     print("deliver poms to airlock")
 
     print("squaring up create")
-    drive_straight(-60, 60)
+    drive_straight(-60, 70)
     drive_timed(-20, 20, pc(1520, 1400))   # spin
-    drive_distance_default(30, 27)
+    drive_straight(50, 19)
+    drive_distance_default(20, 3)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
-    wait_for_button()
     drive_straight(-40, pc(6, 4.6)) # Prime was originally 3
 
     spin(25, 90)
-    wait_for_button()
     msleep(500)
 
-    drive_straight(40, pc(24, 13)) # prime was originally 13.5
+    drive_straight(40, pc(15, 13)) # prime was originally 13.5
+    drive_distance_default(20, 3)
     msleep(500)
+    servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)
 
     print("moving airlock to proper position")
-    drive_straight(-40, 3)
-    wait_for_button()
-    spin(-10, 25)
-    wait_for_button()
-    msleep(500)
-    spin(10, 30)
+    drive_straight(-40, 15)
+    drive_timed(10, -10, 200)
     wait_for_button()
     msleep(500)
-    drive_distance_default(-10, pc(10, 10))  # FIND PRIME VALUE
-    spin(-10, 15)
+    drive_straight(40, 9)
+    msleep(500)
+    spin(-5, 10)
+    msleep(500)
+    wait_for_button()
 
+    print("moving claw to airlock")
+    drive_timed(-10, 10, 200)
+    msleep(250)
+    wait_for_button()
+    servo.move(c.ARM, c.ARM_MAX)
+    msleep(250)
+    servo.move(c.WRIST, c.WRIST_MAX)
+    msleep(250)
+    drive_straight(-40, 8)
+    wait_for_button()
+    msleep(250)
+    spin(-10, 4)
+    msleep(250)
+    wait_for_button()
+    drive_straight(-50, 8)
+    wait_for_button()
+
+    print("delivering poms")
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # was 0
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)  # was 0
+    wait_for_button()
     drive_distance_default(10, pc(7, 9))
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
     # spin(-10, 3)
-    drive_timed(10, -10, 125)
+    # drive_timed(10, -10, 125)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN, 15)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN, 15)
 
     # spin(3, 5)
-    drive_timed(-10, 10, 90)
+    # drive_timed(-10, 10, 90)
     for x in range(0):
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN)
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)

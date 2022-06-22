@@ -24,7 +24,7 @@ if IS_PRIME:
 
     # Servo Positions
     ARM_START = 600
-    ARM_BOTGUY = 2047
+    ARM_MAX = 2047
     ARM_DOWN = 380
     ARM_DELIVER_HIGH = 1660
     ARM_DELIVER_FINAL = 1425
@@ -39,6 +39,7 @@ if IS_PRIME:
     WRIST_CUBES = 1500
     WRIST_DELIVER_LOW = 258
     WRIST_DRIVE_UP = 525  # value for wrist to pe perpendicular to ground when driving
+    WRIST_MAX = 2047
 
     LEFT_WIPER_CLOSED = 458
     LEFT_WIPER_CENTER = 800
