@@ -30,7 +30,6 @@ def drive_timed(l_speed: int, r_speed: int, drive_time: int):
 def drive_distance_default(speed: int, distance: float):
     converted = (speed * 5) / 25.4  # mm/sec to in/sec
     ms = abs(int((distance / converted) * 1000))
-    print("converted: ", converted, "ms: ", ms)
     drive_timed(speed, speed, ms)
 
 
@@ -49,7 +48,6 @@ def calibrated_gyro_z():
 
 def drive_distance_straight(speed: int, distance: float):
     end_time = time() + abs(distance * 25.4 / speed / 5)
-    print("drive time: ", abs(distance * 25.4 / speed / 5))
     r_speed = l_speed = speed
 
     while time() < end_time:
@@ -68,7 +66,6 @@ def drive_distance_straight(speed: int, distance: float):
 
 def drive_distance_straight_2(speed: int, distance):
     end_time = time() + abs(distance * 25.4 / speed / 5)
-    print("drive time: ", abs(distance * 25.4 / speed / 5))
     r_speed = l_speed = speed
     tot_offset = 0
     while time() < end_time:

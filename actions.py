@@ -28,9 +28,9 @@ def init():
 
     power_on_self_test()
 
-    motor_power(c.BOT_STICK, 50)
+    motor_power(c.BOT_STICK, 30)  # was originally 50
     msleep(200)
-    motor_power(c.BOT_STICK, 10)  # hold bot stick above cubes to start
+    motor_power(c.BOT_STICK, 8)  # hold bot stick above cubes to start and was originally 10
 
     wait_4_light(True)
 
@@ -389,7 +389,7 @@ def collect_poms_new():
     collect_green_pom(c.ARM_DOWN, c.WRIST_POM)
 
     print("picking up pom 7")
-    drive_with_line_follow(10, 6)
+    drive_with_line_follow(10, 6.5)  # was 6
     collect_red_pom(c.ARM_DOWN, c.WRIST_POM)
 
     print("picking up pom 8")
@@ -404,7 +404,7 @@ def collect_poms_new():
 
     servo.move(c.ARM, c.ARM_MAX)
     servo.move(c.WRIST, c.WRIST_DRIVE_UP, 15)
-    drive_distance_default(50, pc(20, 20)) # prime was 18 for distance
+    drive_distance_default(50, pc(20, 20))  # prime was 18 for distance
 
 
 def collect_red_pom(arm_height, wrist_height):
@@ -449,7 +449,6 @@ def deliver_poms_to_airlock():
     drive_timed(-20, 20, pc(1520, 1400))   # spin
     drive_straight(50, 19)
     drive_distance_default(20, 3)
-    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
     drive_straight(-40, pc(6, 4.6)) # Prime was originally 3
 
     spin(25, 90)
@@ -458,41 +457,41 @@ def deliver_poms_to_airlock():
     drive_straight(40, pc(15, 13)) # prime was originally 13.5
     drive_distance_default(20, 3)
     msleep(500)
+    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)
 
     print("moving airlock to proper position")
     drive_straight(-40, 15)
     drive_timed(10, -10, 200)
-    wait_for_button()
-    msleep(500) 
+    msleep(500)
     drive_straight(40, 9)
     msleep(500)
-    spin(-5, 10)
+    spin(-5, 12)  # was originally 10
     msleep(500)
-    wait_for_button()
 
     print("moving claw to airlock")
     drive_timed(-10, 10, 200)
     msleep(250)
-    wait_for_button()
     servo.move(c.ARM, c.ARM_MAX)
     msleep(250)
     servo.move(c.WRIST, c.WRIST_MAX)
     msleep(250)
+    drive_timed(10, -10, 700)
+    msleep(250)
     drive_straight(-40, 8)
-    wait_for_button()
     msleep(250)
-    spin(-10, 4)
-    msleep(250)
-    wait_for_button()
-    drive_straight(-50, 8)
-    wait_for_button()
+    # drive_timed(10, -10, 500)
+    # msleep(250)
+    # wait_for_button()
+    # drive_straight(-50, 2)  # was 8
+    # wait_for_button()
 
     print("delivering poms")
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # was 0
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)  # was 0
     wait_for_button()
-    drive_distance_default(10, pc(7, 9))
+    drive_distance_default(10, pc(2, 9))  # prime was 7
+    wait_for_button()
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
     # spin(-10, 3)
@@ -515,7 +514,7 @@ def deliver_poms_to_airlock():
     msleep(500)
     disable_servo(c.RIGHT_WIPER)
     # spin(3, 3)
-    drive_timed(-10, 10, 90)
+    # drive_timed(-10, 10, 90)
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)  # places the arm completely down on the airlock
 
 
