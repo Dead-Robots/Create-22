@@ -22,3 +22,19 @@ def move_motor_till_stall(motor_num, speed):
         msleep(25)
 
     motor_power(motor_num, 0)
+
+
+def move_motor_to_position(motor_num, speed, position):
+    clear_motor_position_counter(motor_num)
+    motor_power(motor_num, speed)
+    msleep(1000)
+
+    while get_motor_position_counter(motor_num) > position + 200:
+        pass
+    motor_power(motor_num, 7)
+    print("reversing the power")
+
+    while get_motor_position_counter(motor_num) > position:
+        pass
+    # motor_power(motor_num, 0)
+    print("bot stick in position")

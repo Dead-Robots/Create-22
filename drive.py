@@ -174,9 +174,11 @@ def drive_until_black_square(speed):
         if rCliff < 1500:
             r_speed = 0
             drive(l_speed, r_speed)
+            # print("right on black")
         if lCliff < 1500:
             l_speed = 0
             drive(l_speed, r_speed)
+            # print("left on black")
         if l_speed == 0 and r_speed == 0:
             break
 
@@ -220,7 +222,7 @@ def drive_with_line_follow(speed, distance):  # distance is in inches
     create_dd(r_speed * -5, l_speed * -5)
     while abs(inches) < abs(distance):
         sensor_value = analog12(c.TOP_HAT)
-        print(sensor_value)
+        # print(sensor_value)
         # if sensor_value >= 1700:
         #     create_dd(((r_speed - 3) * -5), l_speed * -5)
         # elif 900 < sensor_value < 1700:
@@ -229,7 +231,7 @@ def drive_with_line_follow(speed, distance):  # distance is in inches
         #     create_dd(r_speed * -5, (l_speed - 3) * -5)
 
         val_difference = round((1050 - sensor_value) / 200)
-        print(val_difference)
+        # print(val_difference)
         if 700 < sensor_value < 1400:
             # print("go straight")
             create_dd(r_speed * -5, l_speed * -5)

@@ -7,7 +7,7 @@ from drive import drive_timed, spin, calibrate_gyro, drive_until_black, drive_st
     spin_to_white, drive, drive_distance_default, on_white, spin_to_white_2, spin_to_black_2, drive_with_line_follow, \
     arc_to_black, drive_until_white, drive_until_black_square
 import servo
-from motors import move_motor_till_stall
+from motors import move_motor_till_stall, move_motor_to_position
 from sensors import read_cliffs, wait_4_light
 from utilities import stop, pc, debug, wait_for_button
 
@@ -28,9 +28,7 @@ def init():
 
     power_on_self_test()
 
-    motor_power(c.BOT_STICK, 30)  # was originally 50
-    msleep(200)
-    motor_power(c.BOT_STICK, 8)  # hold bot stick above cubes to start and was originally 10
+    move_motor_to_position(c.BOT_STICK, -40, -700)
 
     wait_4_light(True)
 
@@ -100,10 +98,11 @@ def power_on_self_test():
     drive_straight(-35, 6)
     print("finished power on self test!")
 
-    move_motor_till_stall(c.BOT_STICK, -50)
+    # move_motor_till_stall(c.BOT_STICK, -50)
 
 
 def collect_and_deliver_cubes():
+    wait_for_button()
     print("collect_and_deliver_cubes")
     move_motor_till_stall(c.BOT_STICK, 50)
 
@@ -134,7 +133,7 @@ def leave_start_box():
 
     msleep(250)
 
-    drive_straight(-60, 49.5) # was 44.5
+    drive_straight(-70, 49.5)  # was 44.5
     spin(-50, 75)
     msleep(250)
 
@@ -152,7 +151,7 @@ def leave_start_box():
     drive_straight(-30, 15)
     spin(-50, 75)
     msleep(250)
-    drive_until_black_square(-30)
+    drive_until_black_square(-20)
     drive_straight(-30, 2)
     msleep(250)
     spin(50, 45)
@@ -364,7 +363,7 @@ def collect_poms_new():
 
     print("picking up pom 1")
     servo.move(c.ARM, c.ARM_DOWN + 50, 10)
-    collect_red_pom(c.ARM_DOWN + 50, c.WRIST_POM) # originally ARM_DOWN + 0
+    collect_red_pom(c.ARM_DOWN + 50, c.WRIST_POM)  # originally ARM_DOWN + 0
 
     print("picking up pom 2")
     # spin(-10, 5)  # was positive
@@ -446,27 +445,27 @@ def deliver_poms_to_airlock():
 
     print("squaring up create")
     drive_straight(-60, 70)
-    drive_timed(-20, 20, pc(1520, 1400))   # spin
+    drive_timed(-20, 20, pc(1520, 1400))  # spin
     drive_straight(50, 19)
     drive_distance_default(20, 3)
-    drive_straight(-40, pc(6, 4.6)) # Prime was originally 3
+    drive_straight(-40, pc(6, 4.6))  # Prime was originally 3
 
     spin(25, 90)
     msleep(500)
 
-    drive_straight(40, pc(15, 13)) # prime was originally 13.5
+    drive_straight(40, pc(15, 13))  # prime was originally 13.5
     drive_distance_default(20, 3)
     msleep(500)
-    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
-    servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)
 
     print("moving airlock to proper position")
     drive_straight(-40, 15)
-    drive_timed(10, -10, 200)
+    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
+    servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)
+    drive_timed(10, -10, 100)
     msleep(500)
-    drive_straight(40, 9)
+    drive_straight(30, 9)
     msleep(500)
-    spin(-5, 12)  # was originally 10
+    spin(-5, 14)  # was originally 10
     msleep(500)
 
     print("moving claw to airlock")
@@ -476,31 +475,21 @@ def deliver_poms_to_airlock():
     msleep(250)
     servo.move(c.WRIST, c.WRIST_MAX)
     msleep(250)
-    drive_timed(10, -10, 700)
+    drive_timed(10, -10, 750)
     msleep(250)
     drive_straight(-40, 8)
     msleep(250)
-    # drive_timed(10, -10, 500)
-    # msleep(250)
-    # wait_for_button()
-    # drive_straight(-50, 2)  # was 8
-    # wait_for_button()
 
     print("delivering poms")
-    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # was 0
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)  # was 0
-    wait_for_button()
-    drive_distance_default(10, pc(2, 9))  # prime was 7
-    wait_for_button()
-    servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
+    servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # was 0
+    drive_distance_default(10, pc(2.5, 9))  # prime was 7
+    msleep(250)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
-    # spin(-10, 3)
-    # drive_timed(10, -10, 125)
+    servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN, 15)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_DELIVER_OPEN, 15)
 
-    # spin(3, 5)
-    # drive_timed(-10, 10, 90)
     for x in range(0):
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_DELIVER_OPEN)
         servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
