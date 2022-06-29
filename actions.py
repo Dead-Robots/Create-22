@@ -362,7 +362,7 @@ def collect_poms_new():
 
     print("line following!")
     servo.move(c.WRIST, c.WRIST_POM - 100)
-    drive_with_line_follow(20, 6)
+    drive_with_line_follow(20, 6) 
     msleep(200)
 
     print("picking up pom 1")
