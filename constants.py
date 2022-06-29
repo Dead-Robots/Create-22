@@ -28,7 +28,7 @@ if IS_PRIME:
     ARM_DOWN = 380
     ARM_DELIVER_HIGH = 1660
     ARM_DELIVER_FINAL = 1425
-    ARM_CUBES = 1330
+    ARM_CUBES = 830  # was originally 1330
     ARM_DELIVER_LOW = 700
 
     WRIST_START = 600
@@ -36,10 +36,10 @@ if IS_PRIME:
     WRIST_POM = 650
     WRIST_DELIVER_HIGH = 1825
     WRIST_DELIVER_FINAL = 1630
-    WRIST_CUBES = 1500
+    WRIST_CUBES = 900  # was originally 1500
     WRIST_DELIVER_LOW = 258
     WRIST_DRIVE_UP = 525  # value for wrist to pe perpendicular to ground when driving
-    WRIST_MAX = 2047
+    WRIST_MAX = 1600
 
     LEFT_WIPER_CLOSED = 458
     LEFT_WIPER_CENTER = 800
@@ -53,6 +53,8 @@ if IS_PRIME:
     RIGHT_WIPER_DELIVER_OPEN = 790 # was 990
 
     TOPHAT_THRESHOLD = 1000
+
+    BOT_STICK_START = -700
 
 
 elif IS_CLONE:
@@ -90,6 +92,8 @@ elif IS_CLONE:
     RIGHT_WIPER_DELIVER_OPEN = 800
 
     TOPHAT_THRESHOLD = 1000
+
+    BOT_STICK_START = -1000
 
 
 else:

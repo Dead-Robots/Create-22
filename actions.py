@@ -28,7 +28,7 @@ def init():
 
     power_on_self_test()
 
-    move_motor_to_position(c.BOT_STICK, -40, -700)
+    move_motor_to_position(c.BOT_STICK, -40, c.BOT_STICK_START)
 
     wait_4_light(True)
 
@@ -104,18 +104,18 @@ def power_on_self_test():
 def collect_and_deliver_cubes():
     wait_for_button()
     print("collect_and_deliver_cubes")
-    move_motor_till_stall(c.BOT_STICK, 50)
+    move_motor_till_stall(c.BOT_STICK, 60)
 
-    drive_distance_default(5, 1)
+    # drive_distance_default(5, 1)
     msleep(250)
 
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN)
-    servo.move(c.ARM, c.ARM_CUBES)
-    servo.move(c.WRIST, c.WRIST_CUBES)
-    spin(20, 70)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 35)
+    servo.move(c.ARM, c.ARM_MAX, 35) # was originally ARM_CUBES
+    servo.move(c.WRIST, c.WRIST_UP, 35) # was originally WRIST_CUBES
+    spin(50, 165) # was originally 20, 70
 
-    servo.move(c.ARM, 1000)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    # servo.move(c.ARM, 1000)
+    # servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     motor_power(c.BOT_STICK, 0)
 
 
@@ -123,13 +123,13 @@ def leave_start_box():
     print("leave_start_box")
 
     print("leaving the start box")
-    servo.move(c.ARM, c.ARM_MAX)
-    servo.move(c.WRIST, c.WRIST_UP)
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    # servo.move(c.ARM, c.ARM_MAX)
+    # servo.move(c.WRIST, c.WRIST_UP)
+    # servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
+    # servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
-    spin(30, 95)
-    drive_distance_default(40, pc(7, 6))
+    # spin(30, 95)
+    drive_distance_default(40, pc(6, 6)) # prime was originally 7
 
     msleep(250)
 
@@ -144,7 +144,7 @@ def leave_start_box():
     drive_straight(-30, 5)
 
     print("spinning to knock off botguy")
-    spin(-45, 175)
+    spin(-65, 175)
     msleep(250)
 
     print("preparing for picking up poms")
@@ -153,8 +153,11 @@ def leave_start_box():
     msleep(250)
     drive_until_black_square(-20)
     drive_straight(-30, 2)
+    servo.move(c.WRIST, c.WRIST_CUBES)
+    servo.move(c.ARM, c.ARM_CUBES)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     msleep(250)
-    spin(50, 45)
+    spin(30, 45)
     msleep(250)
 
     print("beginning of pom pickup")
@@ -358,7 +361,8 @@ def collect_poms_new():
     print("collect_poms")
 
     print("line following!")
-    drive_with_line_follow(20, 7)
+    servo.move(c.WRIST, c.WRIST_POM - 100)
+    drive_with_line_follow(20, 6)
     msleep(200)
 
     print("picking up pom 1")
@@ -446,15 +450,15 @@ def deliver_poms_to_airlock():
     print("squaring up create")
     drive_straight(-60, 70)
     drive_timed(-20, 20, pc(1520, 1400))  # spin
-    drive_straight(50, 19)
-    drive_distance_default(20, 3)
+    drive_straight(60, 19)
+    drive_distance_default(35, 3)
     drive_straight(-40, pc(6, 4.6))  # Prime was originally 3
 
     spin(25, 90)
     msleep(500)
 
-    drive_straight(40, pc(15, 13))  # prime was originally 13.5
-    drive_distance_default(20, 3)
+    drive_straight(60, pc(15, 13))  # prime was originally 13.5
+    drive_distance_default(35, 3)
     msleep(500)
 
     print("moving airlock to proper position")
