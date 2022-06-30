@@ -156,6 +156,7 @@ def leave_start_box():
     servo.move(c.WRIST, c.WRIST_CUBES)
     servo.move(c.ARM, c.ARM_CUBES)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    wait_for_button()
     msleep(250)
     spin(30, 45)
     msleep(250)
@@ -362,11 +363,12 @@ def collect_poms_new():
 
     print("line following!")
     servo.move(c.WRIST, c.WRIST_POM - 100)
-    drive_with_line_follow(20, 6) 
+    servo.move(c.ARM, c.ARM_DOWN + 50) # was originally + 100
+    drive_with_line_follow(20, 6)
     msleep(200)
 
     print("picking up pom 1")
-    servo.move(c.ARM, c.ARM_DOWN + 50, 10)
+    servo.move(c.ARM, c.ARM_DOWN + 100, 10) # was originally + 50
     collect_red_pom(c.ARM_DOWN + 50, c.WRIST_POM)  # originally ARM_DOWN + 0
 
     print("picking up pom 2")
@@ -487,7 +489,7 @@ def deliver_poms_to_airlock():
     print("delivering poms")
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)  # was 0
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # was 0
-    drive_distance_default(10, pc(2.5, 9))  # prime was 7
+    drive_distance_default(10, pc(3.5, 9))  # prime was 7
     msleep(250)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
