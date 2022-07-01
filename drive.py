@@ -171,7 +171,7 @@ def drive_until_black_square(speed):
     l_speed = r_speed = speed
     while True:
         rCliff, lCliff = read_cliffs()
-        if rCliff < 1500:
+        if rCliff < u.pc(1500, 1700):
             r_speed = 0
             drive(l_speed, r_speed)
             # print("right on black")

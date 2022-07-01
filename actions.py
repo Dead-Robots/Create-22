@@ -133,30 +133,29 @@ def leave_start_box():
 
     msleep(250)
 
-    drive_straight(-70, 49.5)  # was 44.5
-    spin(-50, 75)
+    drive_straight(-70, pc(49.5, 50.5))  # was 44.5
+    spin(-50, pc(75, 88))
     msleep(250)
 
     print("going to knock off botguy")
-    drive_straight(30, 20.5)  # was 19.5
-    spin(-50, 80)
+    drive_straight(30, pc(20.5, 19.7))  # was 19.5
+    spin(-50, pc(80, 85))
     msleep(250)
-    drive_straight(-30, 5)
+    drive_straight(-30, pc(5, 7))
 
     print("spinning to knock off botguy")
-    spin(-65, 175)
+    spin(-55, 175)
     msleep(250)
 
     print("preparing for picking up poms")
     drive_straight(-30, 15)
-    spin(-50, 75)
+    spin(-50, pc(75, 93))
     msleep(250)
     drive_until_black_square(-20)
     drive_straight(-30, 2)
     servo.move(c.WRIST, c.WRIST_CUBES)
     servo.move(c.ARM, c.ARM_CUBES)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
-    wait_for_button()
     msleep(250)
     spin(30, 45)
     msleep(250)
@@ -362,7 +361,7 @@ def collect_poms_new():
     print("collect_poms")
 
     print("line following!")
-    servo.move(c.WRIST, c.WRIST_POM - 100)
+    servo.move(c.WRIST, c.WRIST_POM - pc(100, 50))
     servo.move(c.ARM, c.ARM_DOWN + 50) # was originally + 100
     drive_with_line_follow(20, 6)
     msleep(200)
@@ -375,30 +374,30 @@ def collect_poms_new():
     # spin(-10, 5)  # was positive
     servo.move(c.ARM, c.ARM_DOWN + 75, 10)
     drive_distance_default(10, 3.5)
-    collect_green_pom(c.ARM_DOWN - 50, c.WRIST_POM)
+    collect_green_pom(c.ARM_DOWN - pc(50, -25), c.WRIST_POM)
 
     print("picking up pom 3")
     drive_with_line_follow(10, 6)
-    collect_red_pom(c.ARM_DOWN - 50, c.WRIST_POM)
+    collect_red_pom(c.ARM_DOWN - pc(50, 0), c.WRIST_POM)
 
     print("picking up pom 4")
     drive_with_line_follow(10, 6)
-    collect_green_pom(c.ARM_DOWN, c.WRIST_POM)
+    collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 5")
     drive_with_line_follow(10, 6)
-    collect_red_pom(c.ARM_DOWN, c.WRIST_POM)
+    collect_red_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 6")
     drive_with_line_follow(10, 6)
-    collect_green_pom(c.ARM_DOWN, c.WRIST_POM)
+    collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 7")
     drive_with_line_follow(10, 6.5)  # was 6
-    collect_red_pom(c.ARM_DOWN, c.WRIST_POM)
+    collect_red_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 8")
-    servo.move(c.ARM, c.ARM_DOWN, 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(0, 50), 10)
     servo.move(c.WRIST, c.WRIST_POM, 10)
     drive_with_line_follow(10, 4.5)
 
@@ -454,42 +453,50 @@ def deliver_poms_to_airlock():
     drive_timed(-20, 20, pc(1520, 1400))  # spin
     drive_straight(60, 19)
     drive_distance_default(35, 3)
-    drive_straight(-40, pc(6, 4.6))  # Prime was originally 3
+    drive_straight(-40, pc(6, 6))  # Prime was originally 3 and clone was originally 4.6
 
     spin(25, 90)
     msleep(500)
 
-    drive_straight(60, pc(15, 13))  # prime was originally 13.5
+    drive_straight(60, pc(15, 15))  # prime was originally 13.5
     drive_distance_default(35, 3)
     msleep(500)
 
     print("moving airlock to proper position")
-    drive_straight(-40, 15)
+    drive_straight(-40, pc(15, 16))
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 15)
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)
     drive_timed(10, -10, 100)
     msleep(500)
     drive_straight(30, 9)
+    wait_for_button()
     msleep(500)
-    spin(-5, 14)  # was originally 10
+    spin(-5, pc(14, 16))  # was originally 10
+    wait_for_button()
     msleep(500)
 
     print("moving claw to airlock")
-    drive_timed(-10, 10, 200)
+    drive_timed(-10, 10, pc(200, 350))
+    wait_for_button()
     msleep(250)
     servo.move(c.ARM, c.ARM_MAX)
     msleep(250)
     servo.move(c.WRIST, c.WRIST_MAX)
+    wait_for_button()
     msleep(250)
-    drive_timed(10, -10, 750)
+    drive_timed(10, -10, pc(750, 900))
+    wait_for_button()
     msleep(250)
     drive_straight(-40, 8)
+    wait_for_button()
     msleep(250)
 
     print("delivering poms")
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)  # was 0
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # was 0
+    wait_for_button()
     drive_distance_default(10, pc(3.5, 9))  # prime was 7
+    wait_for_button()
     msleep(250)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)

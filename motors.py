@@ -1,5 +1,7 @@
 from kipr import motor_power, msleep, freeze, clear_motor_position_counter, get_motor_position_counter
 
+from utilities import pc
+
 
 def move_timed(motor_num, speed: int, time):
     motor_power(motor_num, speed)
@@ -31,7 +33,7 @@ def move_motor_to_position(motor_num, speed, position):
 
     while get_motor_position_counter(motor_num) > position + 200:
         pass
-    motor_power(motor_num, 7)
+    motor_power(motor_num, pc(7, 6))
     print("reversing the power")
 
     while get_motor_position_counter(motor_num) > position:
