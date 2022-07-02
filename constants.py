@@ -7,8 +7,6 @@ START_LIGHT = 1
 START_LIGHT_THRESHOLD = 0
 
 # Servo Ports
-ARM = 0
-WRIST = 1
 RIGHT_WIPER = 2
 LEFT_WIPER = 3
 
@@ -18,6 +16,9 @@ BOT_STICK = 3
 TOP_HAT = 0
 
 if IS_PRIME:
+    ARM = 0
+    WRIST = 1
+
     print("I am prime")
 
     ADJUST_SPEED = 1.0
@@ -58,24 +59,27 @@ if IS_PRIME:
 
 
 elif IS_CLONE:
+    ARM = 1
+    WRIST = 0
+
     print("I am clone")
 
     ADJUST_SPEED = 1.0  # Factor for left motor in drive function
 
     # Servo Positions
     ARM_MAX = 2047
-    ARM_DOWN = 430
-    ARM_DELIVER_HIGH = 1800
-    ARM_DELIVER_FINAL = 1700
+    ARM_DOWN = 450 #430
+    ARM_DELIVER_HIGH = 1700
+    ARM_DELIVER_FINAL = 1500 #1700
     ARM_CUBES = 1330 # was originally 1600
     ARM_DELIVER_LOW = 700
 
-    WRIST_START = 230
-    WRIST_UP = 1100
+    WRIST_START = 560  # 230
+    WRIST_UP = 1250  #1100
     WRIST_MAX = 1100
-    WRIST_POM = 210
-    WRIST_DELIVER_HIGH = 1400
-    WRIST_DELIVER_FINAL = 1250
+    WRIST_POM = 560 #210
+    WRIST_DELIVER_HIGH = 1550 #1400
+    WRIST_DELIVER_FINAL = 1500 #1250
     WRIST_CUBES = 800
     WRIST_DELIVER_LOW = 250
     WRIST_DRIVE_UP = 525  # value for wrist to pe perpendicular to ground when driving
@@ -88,7 +92,7 @@ elif IS_CLONE:
 
     RIGHT_WIPER_CLOSED = 1100
     RIGHT_WIPER_CENTER = 740
-    RIGHT_WIPER_OPEN = 260 # originally 375
+    RIGHT_WIPER_OPEN = 275 # originally 375
     RIGHT_WIPER_DELIVER_OPEN = 800
 
     TOPHAT_THRESHOLD = 1000

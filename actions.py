@@ -107,7 +107,6 @@ def collect_and_deliver_cubes():
     print("collect_and_deliver_cubes")
     move_motor_till_stall(c.BOT_STICK, 60)
 
-    # drive_distance_default(5, 1)
     msleep(250)
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 65)
@@ -115,14 +114,10 @@ def collect_and_deliver_cubes():
     servo.move(c.WRIST, c.WRIST_UP, 65)  # was originally WRIST_CUBES
     spin(50, 165)  # was originally 20, 70
 
-    # servo.move(c.ARM, 1000)
-    # servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     motor_power(c.BOT_STICK, 0)
 
 
 def leave_start_box():
-    print("leave_start_box")
-
     print("leaving the start box")
 
     drive_distance_default(50, pc(6, 6))  # squaring up against the wall
@@ -145,7 +140,6 @@ def leave_start_box():
     msleep(250)
     global botguy_grab_time
     botguy_grab_time = time.time() - t
-
 
     print("preparing for picking up poms")
     drive_straight(-30, 15)
@@ -363,7 +357,7 @@ def collect_poms_new():
     print("line following!")
     servo.move(c.WRIST, c.WRIST_POM - pc(100, 50))
     servo.move(c.ARM, c.ARM_DOWN + 50)  # was originally + 100
-    drive_with_line_follow(20, 8)
+    drive_with_line_follow(20, pc(7.2, 6))
     msleep(200)
 
     print("picking up pom 1")
@@ -371,10 +365,9 @@ def collect_poms_new():
     collect_red_pom(c.ARM_DOWN + 50, c.WRIST_POM)  # originally ARM_DOWN + 0
 
     print("picking up pom 2")
-    # spin(-10, 5)  # was positive
     servo.move(c.ARM, c.ARM_DOWN + 75, 10)
-    drive_distance_default(10, 3.5)
-    collect_green_pom(c.ARM_DOWN - pc(50, -25), c.WRIST_POM)
+    drive_distance_default(10, 3.3)  # originally 3.5
+    collect_green_pom(c.ARM_DOWN - pc(50, 0), c.WRIST_POM)
 
     print("picking up pom 3")
     drive_with_line_follow(10, 6)
@@ -385,11 +378,11 @@ def collect_poms_new():
     collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 5")
-    drive_with_line_follow(10, 6)
+    drive_with_line_follow(10, 6.3)
     collect_red_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 6")
-    drive_with_line_follow(10, 6)
+    drive_with_line_follow(10, 6.4)
     collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 7")
@@ -399,7 +392,7 @@ def collect_poms_new():
     print("picking up pom 8")
     servo.move(c.ARM, c.ARM_DOWN + pc(0, 50), 10)
     servo.move(c.WRIST, c.WRIST_POM, 10)
-    drive_with_line_follow(10, 4.5)
+    drive_with_line_follow(10, pc(4.5, 4))
 
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.ARM, c.ARM_DOWN + 75, 10)
@@ -470,7 +463,7 @@ def deliver_poms_to_airlock():
     msleep(500)
     drive_straight(30, 9)
     msleep(500)
-    spin(-5, pc(14, 16))  # was originally 10
+    spin(-5, pc(14, 18))  # was originally 10
     msleep(500)
 
     print("moving claw to airlock")
@@ -488,7 +481,7 @@ def deliver_poms_to_airlock():
     print("delivering poms")
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)  # was 0
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # was 0
-    drive_distance_default(10, pc(3.5, 9))  # prime was 7
+    drive_distance_default(10, pc(3.5, 3))
     msleep(250)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
