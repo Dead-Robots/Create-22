@@ -366,7 +366,7 @@ def collect_poms_new():
 
     print("picking up pom 2")
     servo.move(c.ARM, c.ARM_DOWN + 75, 10)
-    drive_distance_default(10, 3.3)  # originally 3.5
+    drive_distance_default(10, 3.5)
     collect_green_pom(c.ARM_DOWN - pc(50, 0), c.WRIST_POM)
 
     print("picking up pom 3")
@@ -374,7 +374,7 @@ def collect_poms_new():
     collect_red_pom(c.ARM_DOWN - pc(50, 0), c.WRIST_POM)
 
     print("picking up pom 4")
-    drive_with_line_follow(10, pc(6, 6.3))
+    drive_with_line_follow(10, pc(6, 6.5))
     collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 5")
@@ -382,18 +382,20 @@ def collect_poms_new():
     collect_red_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 6")
-    drive_with_line_follow(10, pc(6, 6.4))
+    drive_with_line_follow(10, pc(6, 6.5))
     collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 7")
     drive_with_line_follow(10, 6.5)  # was 6
     collect_red_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN - 400)
 
     print("picking up pom 8")
     servo.move(c.ARM, c.ARM_DOWN + pc(0, 50), 10)
     servo.move(c.WRIST, c.WRIST_POM, 10)
-    drive_with_line_follow(10, pc(4.5, 4))
+    drive_with_line_follow(10, pc(4.5, 4.2))
 
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
     servo.move(c.ARM, c.ARM_DOWN + 75, 10)
 
@@ -451,7 +453,7 @@ def deliver_poms_to_airlock():
     spin(25, 90)
     msleep(500)
 
-    drive_straight(60, pc(15, 15))  # prime was originally 13.5
+    drive_straight(60, pc(15, 17))  # prime was originally 13.5
     drive_distance_default(35, 3)
     msleep(500)
 
