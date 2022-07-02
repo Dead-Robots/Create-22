@@ -374,15 +374,15 @@ def collect_poms_new():
     collect_red_pom(c.ARM_DOWN - pc(50, 0), c.WRIST_POM)
 
     print("picking up pom 4")
-    drive_with_line_follow(10, 6)
+    drive_with_line_follow(10, pc(6, 6.3))
     collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 5")
-    drive_with_line_follow(10, 6.3)
+    drive_with_line_follow(10, pc(6, 6.3))
     collect_red_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 6")
-    drive_with_line_follow(10, 6.4)
+    drive_with_line_follow(10, pc(6, 6.4))
     collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
 
     print("picking up pom 7")
