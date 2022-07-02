@@ -17,6 +17,7 @@ from createserial.serial import open_serial, close_serial
 from createserial.shutdown import shutdown_create_in
 
 t = 0
+botguy_grab_time = 0
 
 
 def init():
@@ -109,10 +110,10 @@ def collect_and_deliver_cubes():
     # drive_distance_default(5, 1)
     msleep(250)
 
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 35)
-    servo.move(c.ARM, c.ARM_MAX, 35) # was originally ARM_CUBES
-    servo.move(c.WRIST, c.WRIST_UP, 35) # was originally WRIST_CUBES
-    spin(50, 165) # was originally 20, 70
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 65)
+    servo.move(c.ARM, c.ARM_MAX, 65)  # was originally ARM_CUBES
+    servo.move(c.WRIST, c.WRIST_UP, 65)  # was originally WRIST_CUBES
+    spin(50, 165)  # was originally 20, 70
 
     # servo.move(c.ARM, 1000)
     # servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
@@ -123,29 +124,28 @@ def leave_start_box():
     print("leave_start_box")
 
     print("leaving the start box")
-    # servo.move(c.ARM, c.ARM_MAX)
-    # servo.move(c.WRIST, c.WRIST_UP)
-    # servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    # servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
 
-    # spin(30, 95)
-    drive_distance_default(40, pc(6, 6)) # prime was originally 7
+    drive_distance_default(50, pc(6, 6))  # squaring up against the wall
 
     msleep(250)
 
-    drive_straight(-70, pc(49.5, 50.5))  # was 44.5
+    drive_straight(-90, pc(49.5, 50.5))  # was 44.5
+    msleep(250)
     spin(-50, pc(75, 88))
-    msleep(250)
+    msleep(250) 
 
     print("going to knock off botguy")
-    drive_straight(30, pc(20.5, 19.7))  # was 19.5
+    drive_straight(60, pc(20.5, 19.7))  # was 19.5 # was speed 30
     spin(-50, pc(80, 85))
-    msleep(250)
-    drive_straight(-30, pc(5, 7))
+    msleep(250)  # was 250
+    drive_straight(-60, pc(6, 7))  # was speed 30
 
     print("spinning to knock off botguy")
-    spin(-55, 175)
+    spin(-55, pc(167, 175))  # the big spin to knock off botguy
     msleep(250)
+    global botguy_grab_time
+    botguy_grab_time = time.time() - t
+
 
     print("preparing for picking up poms")
     drive_straight(-30, 15)
@@ -362,12 +362,12 @@ def collect_poms_new():
 
     print("line following!")
     servo.move(c.WRIST, c.WRIST_POM - pc(100, 50))
-    servo.move(c.ARM, c.ARM_DOWN + 50) # was originally + 100
-    drive_with_line_follow(20, 6)
+    servo.move(c.ARM, c.ARM_DOWN + 50)  # was originally + 100
+    drive_with_line_follow(20, 8)
     msleep(200)
 
     print("picking up pom 1")
-    servo.move(c.ARM, c.ARM_DOWN + 100, 10) # was originally + 50
+    servo.move(c.ARM, c.ARM_DOWN + 100, 10)  # was originally + 50
     collect_red_pom(c.ARM_DOWN + 50, c.WRIST_POM)  # originally ARM_DOWN + 0
 
     print("picking up pom 2")
@@ -469,34 +469,26 @@ def deliver_poms_to_airlock():
     drive_timed(10, -10, 100)
     msleep(500)
     drive_straight(30, 9)
-    wait_for_button()
     msleep(500)
     spin(-5, pc(14, 16))  # was originally 10
-    wait_for_button()
     msleep(500)
 
     print("moving claw to airlock")
     drive_timed(-10, 10, pc(200, 350))
-    wait_for_button()
     msleep(250)
     servo.move(c.ARM, c.ARM_MAX)
     msleep(250)
     servo.move(c.WRIST, c.WRIST_MAX)
-    wait_for_button()
     msleep(250)
     drive_timed(10, -10, pc(750, 900))
-    wait_for_button()
     msleep(250)
     drive_straight(-40, 8)
-    wait_for_button()
     msleep(250)
 
     print("delivering poms")
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)  # was 0
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # was 0
-    wait_for_button()
     drive_distance_default(10, pc(3.5, 9))  # prime was 7
-    wait_for_button()
     msleep(250)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # prime doesn't need wrist adjustment here
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
@@ -529,7 +521,8 @@ def shut_down():
 
     # Close serial port connection to the Create
     close_serial()
-    print("shut down", time.time() - t)
+    print("botguy grab time", botguy_grab_time)
+    print("shut down total time", time.time() - t)
     exit(0)
 
 
