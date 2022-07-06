@@ -11,8 +11,8 @@ import utilities
 
 def main():
     a.init()
-    a.collect_and_deliver_cubes()
-    a.leave_start_box()
+    a.collect_cubes()
+    a.leave_start_box_and_knock_off_botguy()
     a.collect_poms_new()
     a.deliver_poms_to_airlock()
     a.shut_down()

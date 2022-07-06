@@ -29,17 +29,17 @@ def init():
 
     power_on_self_test()
 
-    move_motor_to_position(c.BOT_STICK, -40, c.BOT_STICK_START)
+    move_motor_to_position(c.BOT_STICK, -40, c.BOT_STICK_START)  # moves botstick down
 
-    wait_4_light(True)
+    wait_4_light(False)
 
-    global t
+    global t  # to print out total time
     t = time.time()
 
-    # shutdown_create_in(119)
+    shutdown_create_in(119)
 
 
-def test_line_follow():
+def test_line_follow():  # we don't use this right now
     wait_for_button()
     servo.move(c.ARM, c.ARM_DOWN + 100)
     drive_with_line_follow(10, 24)
@@ -49,10 +49,10 @@ def test_line_follow():
 def power_on_self_test():
     print("starting power on self test")
 
-    print("moving hook")
-    move_motor_till_stall(c.BOT_STICK, 50)
+    print("moving botstick")
+    move_motor_till_stall(c.BOT_STICK, 50) # swings botstick up
 
-    enable_servo(c.WRIST)
+    enable_servo(c.WRIST) # moving arm, wrist, and wipers into start position
     servo.move(c.WRIST, c.WRIST_START)
     enable_servo(c.ARM)
     servo.move(c.ARM, c.ARM_DOWN)
@@ -102,65 +102,64 @@ def power_on_self_test():
     # move_motor_till_stall(c.BOT_STICK, -50)
 
 
-def collect_and_deliver_cubes():
-    wait_for_button()
+def collect_cubes(): # was collect and deliver cubes
     print("collect_and_deliver_cubes")
-    move_motor_till_stall(c.BOT_STICK, 60)
+    move_motor_till_stall(c.BOT_STICK, 60) # first thing in routine, lifts botstick up and out of the way
 
     msleep(250)
 
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 65)
-    servo.move(c.ARM, c.ARM_MAX, 65)  # was originally ARM_CUBES
-    servo.move(c.WRIST, c.WRIST_UP, 65)  # was originally WRIST_CUBES
-    spin(50, 165)  # was originally 20, 70
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 65) # gripping cubes
+    servo.move(c.ARM, c.ARM_MAX, 65)  # lifts up arm
+    servo.move(c.WRIST, c.WRIST_UP, 65)  # lifts up wrist
+    spin(50, 165)  # spin to wall, theoretically is a 180ish turn
 
-    motor_power(c.BOT_STICK, 0)
+    motor_power(c.BOT_STICK, 0) # stops motor so that we don't burn out the motor
 
 
-def leave_start_box():
+def leave_start_box_and_knock_off_botguy(): # was leave start box
     print("leaving the start box")
 
     drive_distance_default(50, pc(6, 6))  # squaring up against the wall
 
     msleep(250)
 
-    drive_straight(-90, pc(49.5, 50.5))  # was 44.5
+    drive_straight(-90, pc(49.5, 50.5))  # drives almost all the way down the board
     msleep(250)
-    spin(-50, pc(75, 88))
-    msleep(250) 
+    spin(-50, pc(75, 88)) # spins so that its front is facing botguy
+    msleep(250)
 
     print("going to knock off botguy")
-    drive_straight(60, pc(20.5, 19.7))  # was 19.5 # was speed 30
-    spin(-50, pc(80, 85))
-    msleep(250)  # was 250
-    drive_straight(-60, pc(6, 7))  # was speed 30
+    drive_straight(60, pc(20.5, 19.7))  # drives towards botguy
+    spin(-50, pc(80, 85)) # spins to face transporter
+    msleep(250)
+    drive_straight(-60, pc(6, 7))  # drives backwards towards rings
 
     print("spinning to knock off botguy")
     spin(-55, pc(167, 175))  # the big spin to knock off botguy
     msleep(250)
-    global botguy_grab_time
+    global botguy_grab_time # records time that it takes to grab botguy
     botguy_grab_time = time.time() - t
 
     print("preparing for picking up poms")
-    drive_straight(-30, 15)
-    spin(-50, pc(75, 93))
+    drive_straight(-30, 15) # drives towards transporter
+    spin(-50, pc(75, 93)) # spins to face other side
     msleep(250)
-    drive_until_black_square(-20)
-    drive_straight(-30, 2)
-    servo.move(c.WRIST, c.WRIST_CUBES)
-    servo.move(c.ARM, c.ARM_CUBES)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    drive_until_black_square(-20) # drives backwards to black line
+    drive_straight(-30, 2) # drives back a little bit more
+    servo.move(c.WRIST, c.WRIST_CUBES) # drops wrist down
+    servo.move(c.ARM, c.ARM_CUBES) # drops arm down
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED) # lets go of cubes
     msleep(250)
-    spin(30, 45)
+    spin(30, 45) # turn a bit towards the line
     msleep(250)
 
     print("beginning of pom pickup")
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED) # preps wipers for pom pick up
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN)
     servo.move(c.WRIST, c.WRIST_POM - 25)
-    servo.move(c.ARM, c.ARM_DOWN)  # lift higher, so wrist doesn't get snagged on the tape?
+    servo.move(c.ARM, c.ARM_DOWN)
     msleep(500)
-    spin_to_black_2(10)
+    spin_to_black_2(10) # spins to black
 
 
 def grab_botguy():
