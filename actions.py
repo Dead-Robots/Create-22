@@ -278,7 +278,7 @@ def deliver_poms_to_airlock():
     print("delivering poms")
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # lowers arm
-    drive_distance_default(10, pc(3.5, 3))  # drive in to deliver on airlock
+    drive_distance_default(10, 3)  # drive in to deliver on airlock
     msleep(250)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # lowers arm and wrist so that it's sitting on the airlock
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
