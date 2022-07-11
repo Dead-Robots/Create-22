@@ -7,6 +7,8 @@ START_LIGHT = 1
 START_LIGHT_THRESHOLD = 0
 
 # Servo Ports
+ARM = 0
+WRIST = 1
 RIGHT_WIPER = 2
 LEFT_WIPER = 3
 
@@ -16,9 +18,6 @@ BOT_STICK = 3
 TOP_HAT = 0
 
 if IS_PRIME:
-    ARM = 0
-    WRIST = 1
-
     print("I am prime")
 
     ADJUST_SPEED = 1.0
@@ -59,16 +58,13 @@ if IS_PRIME:
 
 
 elif IS_CLONE:
-    ARM = 1
-    WRIST = 0
-
     print("I am clone")
 
     ADJUST_SPEED = 1.0  # Factor for left motor in drive function
 
     # Servo Positions
     ARM_MAX = 2047
-    ARM_DOWN = 450
+    ARM_DOWN = 450   # needs to be 480 on pick up
     ARM_DELIVER_HIGH = 1700
     ARM_DELIVER_FINAL = 1500
     ARM_CUBES = 1330
@@ -77,7 +73,7 @@ elif IS_CLONE:
     WRIST_START = 560
     WRIST_UP = 1250
     WRIST_MAX = 1100
-    WRIST_POM = 560
+    WRIST_POM = 485  # 560 before
     WRIST_DELIVER_HIGH = 1550
     WRIST_DELIVER_FINAL = 1500
     WRIST_CUBES = 800
@@ -92,7 +88,7 @@ elif IS_CLONE:
 
     RIGHT_WIPER_CLOSED = 1100
     RIGHT_WIPER_CENTER = 740
-    RIGHT_WIPER_OPEN = 275
+    RIGHT_WIPER_OPEN = 210 # was 275
     RIGHT_WIPER_DELIVER_OPEN = 800
 
     TOPHAT_THRESHOLD = 1000

@@ -108,6 +108,7 @@ def collect_cubes():  # was collect and deliver cubes
 
     msleep(250)
 
+    drive_distance_default(5, 0.5)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 65)  # gripping cubes
     servo.move(c.ARM, c.ARM_MAX, 65)  # lifts up arm
     servo.move(c.WRIST, c.WRIST_UP, 65)  # lifts up wrist
@@ -167,7 +168,7 @@ def collect_poms_new():
 
     print("line following!")
     servo.move(c.WRIST, c.WRIST_POM - pc(100, 50))
-    servo.move(c.ARM, c.ARM_DOWN + 50)  # was originally + 100
+    servo.move(c.ARM, c.ARM_DOWN + 70)  # was originally + 100, +50
     drive_with_line_follow(20, pc(7.2, 6))
     msleep(200)
 
@@ -178,7 +179,7 @@ def collect_poms_new():
     print("picking up pom 2")
     servo.move(c.ARM, c.ARM_DOWN + 75, 10)
     drive_distance_default(10, 3.5)
-    collect_green_pom(c.ARM_DOWN - pc(50, 0), c.WRIST_POM)
+    collect_green_pom(c.ARM_DOWN - pc(50, 25), c.WRIST_POM)  # clone used to be 0
 
     print("picking up pom 3")
     drive_with_line_follow(10, 6)
@@ -186,28 +187,28 @@ def collect_poms_new():
 
     print("picking up pom 4")
     drive_with_line_follow(10, pc(6, 6.5))
-    collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
+    collect_green_pom(c.ARM_DOWN + pc(0, 30), c.WRIST_POM)
 
     print("picking up pom 5")
     drive_with_line_follow(10, pc(6, 6.3))
-    collect_red_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
+    collect_red_pom(c.ARM_DOWN + pc(0, 30), c.WRIST_POM)
 
     print("picking up pom 6")
     drive_with_line_follow(10, pc(6, 6.5))
-    collect_green_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
+    collect_green_pom(c.ARM_DOWN + pc(0, 30), c.WRIST_POM)
 
     print("picking up pom 7")
     drive_with_line_follow(10, 6.5)  # was 6
-    collect_red_pom(c.ARM_DOWN + pc(0, 50), c.WRIST_POM)
+    collect_red_pom(c.ARM_DOWN + pc(0, 30), c.WRIST_POM)
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_OPEN - 400)
 
     print("picking up pom 8")
-    servo.move(c.ARM, c.ARM_DOWN + pc(0, 50), 10)
+    servo.move(c.ARM, c.ARM_DOWN + pc(0, 30), 10)
     servo.move(c.WRIST, c.WRIST_POM, 10)
-    drive_with_line_follow(10, pc(4.5, 4.2))
+    drive_with_line_follow(10, pc(5.5, 5.2))
 
-    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED - 100)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED + 100)
     servo.move(c.ARM, c.ARM_DOWN + 75, 10)
 
     drive_distance_default(-25, 3)  # drives back a bit
@@ -243,7 +244,7 @@ def deliver_poms_to_airlock():
     drive_timed(-20, 20, pc(1520, 1400))  # spins 90 degrees towards the wall with rings
     drive_straight(60, 19)  # drives forward
     drive_distance_default(35, 3)  # slows down when squaring up against wall, so that wheel doesn't slip
-    drive_straight(-40, pc(6, 6))  # backs up off the wall a bit
+    drive_straight(-40, pc(6.6, 6.6))  # backs up off the wall a bit, used to be 6 for both
 
     spin(25, 90)  # spins 90 degrees towards the airlock
     msleep(500)
@@ -270,7 +271,7 @@ def deliver_poms_to_airlock():
     msleep(250)
     servo.move(c.WRIST, c.WRIST_MAX)
     msleep(250)
-    drive_timed(10, -10, pc(750, 900))  # spin back so that the arm is over the airlock
+    drive_timed(10, -10, pc(650, 600))  # spin back so that the arm is over the airlock, pc(750, 900)
     msleep(250)
     drive_straight(-40, 8)  # back up away from the airlock
     msleep(250)
@@ -278,7 +279,7 @@ def deliver_poms_to_airlock():
     print("delivering poms")
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # lowers arm
-    drive_distance_default(10, 3)  # drive in to deliver on airlock
+    drive_distance_default(10, 3.2)  # drive in to deliver on airlock
     msleep(250)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # lowers arm and wrist so that it's sitting on the airlock
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
