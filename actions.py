@@ -1,6 +1,6 @@
 import time
 from kipr import create_disconnect, msleep, enable_servo, push_button, disable_servos, disable_servo, analog, analog_et, \
-    motor, motor_power
+    motor, motor_power, set_servo_position
 import constants as c
 import utilities
 from drive import drive_timed, spin, calibrate_gyro, drive_until_black, drive_straight, pivot, spin_to_black, \
@@ -31,7 +31,8 @@ def init():
 
     move_motor_to_position(c.BOT_STICK, -40, c.BOT_STICK_START)  # moves botstick down
 
-    wait_4_light(False)
+    wait_for_button()
+    #wait_4_light(False)
 
     global t  # to print out total time
     t = time.time()
@@ -108,13 +109,55 @@ def collect_cubes():  # was collect and deliver cubes
 
     msleep(250)
 
-    drive_distance_default(5, 0.5)
-    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 65)  # gripping cubes
+    # drive_distance_default(5, 0.5)
+    set_servo_position(c.RIGHT_WIPER, c.RIGHT_WIPER_GRAB)  # gripping cubes
+    set_servo_position(c.LEFT_WIPER, c.LEFT_WIPER_GRAB)
+    msleep(300)
     servo.move(c.ARM, c.ARM_MAX, 65)  # lifts up arm
     servo.move(c.WRIST, c.WRIST_UP, 65)  # lifts up wrist
     spin(50, 165)  # spin to wall, theoretically is a 180ish turn
 
     motor_power(c.BOT_STICK, 0)  # stops motor so that we don't burn out the motor
+
+
+def collect_cubes_new():
+    print("collect_and_deliver_cubes")
+    move_motor_till_stall(c.BOT_STICK, 60)  # first thing in routine, lifts botstick up and out of the way
+
+    msleep(250)
+
+    motor_power(c.BOT_STICK, 0)  # stops motor so that we don't burn out the motor
+
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 65)  # gripping cubes
+    wait_for_button()
+    servo.move(c.ARM, c.ARM_MAX, 65)  # lifts up arm
+    wait_for_button()
+    servo.move(c.WRIST, c.WRIST_UP, 65)  # lifts up wrist
+    wait_for_button()
+    drive_timed(-40, 40, 1000)
+    #spin(50, 165)  # spin to wall, theoretically is a 180ish turn
+    wait_for_button()
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)
+    wait_for_button()
+
+    drive_timed(40, -40, 1000)
+    #spin(-50, 165)
+    wait_for_button()
+    servo.move(c.WRIST, c.WRIST_POM)
+    wait_for_button()
+    servo.move(c.ARM, c.ARM_DOWN)
+
+    drive_distance_default(5, 0.5)
+    wait_for_button()
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_OPEN, 65)  # gripping cubes
+    wait_for_button()
+    servo.move(c.ARM, c.ARM_MAX, 65)  # lifts up arm
+    wait_for_button()
+    servo.move(c.WRIST, c.WRIST_UP, 65)  # lifts up wrist
+    wait_for_button()
+    spin(50, 165)  # spin to wall, theoretically is a 180ish turn
+    wait_for_button()
+
 
 
 def leave_start_box_and_knock_off_botguy():  # was leave start box
@@ -205,7 +248,7 @@ def collect_poms_new():
     print("picking up pom 8")
     servo.move(c.ARM, c.ARM_DOWN + pc(0, 30), 10)
     servo.move(c.WRIST, c.WRIST_POM, 10)
-    drive_with_line_follow(10, pc(5.5, 5.2))
+    drive_with_line_follow(10, pc(5.3, 5))
 
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED - 100)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED + 100)
@@ -244,7 +287,7 @@ def deliver_poms_to_airlock():
     drive_timed(-20, 20, pc(1520, 1400))  # spins 90 degrees towards the wall with rings
     drive_straight(60, 19)  # drives forward
     drive_distance_default(35, 3)  # slows down when squaring up against wall, so that wheel doesn't slip
-    drive_straight(-40, pc(6.6, 6.6))  # backs up off the wall a bit, used to be 6 for both
+    drive_straight(-40, pc(6.5, 6.5))  # backs up off the wall a bit, used to be 6 for both
 
     spin(25, 90)  # spins 90 degrees towards the airlock
     msleep(500)
@@ -279,7 +322,7 @@ def deliver_poms_to_airlock():
     print("delivering poms")
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # lowers arm
-    drive_distance_default(10, 3.2)  # drive in to deliver on airlock
+    drive_distance_default(10, pc(3.2, 3.4))  # drive in to deliver on airlock
     msleep(250)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # lowers arm and wrist so that it's sitting on the airlock
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
