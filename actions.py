@@ -31,8 +31,8 @@ def init():
 
     move_motor_to_position(c.BOT_STICK, -40, c.BOT_STICK_START)  # moves botstick down
 
-    wait_for_button()
-    #wait_4_light(False)
+    # wait_for_button()
+    wait_4_light(False)
 
     global t  # to print out total time
     t = time.time()
@@ -193,6 +193,7 @@ def leave_start_box_and_knock_off_botguy():  # was leave start box
     servo.move(c.WRIST, c.WRIST_CUBES)  # drops wrist down
     servo.move(c.ARM, c.ARM_CUBES)  # drops arm down
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)  # lets go of cubes
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     msleep(250)
     spin(30, 45)  # turn a bit towards the line
     msleep(250)
@@ -314,7 +315,7 @@ def deliver_poms_to_airlock():
     msleep(250)
     servo.move(c.WRIST, c.WRIST_MAX)
     msleep(250)
-    drive_timed(10, -10, pc(650, 600))  # spin back so that the arm is over the airlock, pc(750, 900)
+    drive_timed(10, -10, pc(700, 700))  # spin back so that the arm is over the airlock, pc(750, 900)
     msleep(250)
     drive_straight(-40, 8)  # back up away from the airlock
     msleep(250)
@@ -322,7 +323,7 @@ def deliver_poms_to_airlock():
     print("delivering poms")
     servo.move(c.WRIST, c.WRIST_DELIVER_HIGH)
     servo.move(c.ARM, c.ARM_DELIVER_HIGH, 10)  # lowers arm
-    drive_distance_default(10, pc(3.2, 3.4))  # drive in to deliver on airlock
+    drive_distance_default(10, pc(3.3, 3.6))  # drive in to deliver on airlock
     msleep(250)
     servo.move(c.WRIST, c.WRIST_DELIVER_FINAL)  # lowers arm and wrist so that it's sitting on the airlock
     servo.move(c.ARM, c.ARM_DELIVER_FINAL, 10)
