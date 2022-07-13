@@ -40,6 +40,7 @@ if IS_PRIME:
     WRIST_DELIVER_LOW = 258
     WRIST_DRIVE_UP = 525  # value for wrist to pe perpendicular to ground when driving
     WRIST_MAX = 1600
+    WRIST_DROP_CUBES = 2047
 
     LEFT_WIPER_CLOSED = 458
     LEFT_WIPER_CENTER = 800
@@ -81,6 +82,7 @@ elif IS_CLONE:
     WRIST_CUBES = 800
     WRIST_DELIVER_LOW = 250
     WRIST_DRIVE_UP = 525  # value for wrist to pe perpendicular to ground when driving
+    WRIST_DROP_CUBES = 2047
 
     LEFT_WIPER_CLOSED = 575
     LEFT_WIPER_CENTER = 875

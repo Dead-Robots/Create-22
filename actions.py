@@ -164,8 +164,17 @@ def leave_start_box_and_knock_off_botguy():  # was leave start box
     print("leaving the start box")
 
     drive_distance_default(50, pc(6, 6))  # squaring up against the wall
-
     msleep(250)
+
+    # dropping cubes off the edge
+    servo.move(c.WRIST, c.WRIST_DROP_CUBES, 65)
+    msleep(100)
+    servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED, 65)
+    msleep(100)
+    servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED, 65)
+    msleep(100)
+    servo.move(c.WRIST, c.WRIST_UP, 65)
+
 
     drive_straight(-90, pc(49.5, 50.5))  # drives almost all the way down the board
     msleep(250)
