@@ -167,6 +167,7 @@ def leave_start_box_and_knock_off_botguy():  # was leave start box
     msleep(250)
 
     # dropping cubes off the edge
+    '''
     servo.move(c.WRIST, c.WRIST_DROP_CUBES, 65)
     msleep(100)
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED, 65)
@@ -174,7 +175,7 @@ def leave_start_box_and_knock_off_botguy():  # was leave start box
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED, 65)
     msleep(100)
     servo.move(c.WRIST, c.WRIST_UP, 65)
-
+    '''
 
     drive_straight(-90, pc(49.5, 50.5))  # drives almost all the way down the board
     msleep(250)
@@ -199,11 +200,20 @@ def leave_start_box_and_knock_off_botguy():  # was leave start box
     msleep(250)
     drive_until_black_square(-20)  # drives backwards to black line
     drive_straight(-30, 2)  # drives back a little bit more
-    servo.move(c.WRIST, c.WRIST_CUBES)  # drops wrist down
-    servo.move(c.ARM, c.ARM_CUBES)  # drops arm down
+
+    # servo.move(c.WRIST, c.WRIST_CUBES)  # drops wrist down
+    # servo.move(c.ARM, c.ARM_CUBES)  # drops arm down
+
+    servo.move(c.WRIST, c.WRIST_POM) # drop wrist down to ground to release cubes
+    servo.move(c.ARM, c.ARM_DOWN)
+
     servo.move(c.RIGHT_WIPER, c.RIGHT_WIPER_CLOSED)  # lets go of cubes
     servo.move(c.LEFT_WIPER, c.LEFT_WIPER_CLOSED)
     msleep(250)
+
+    servo.move(c.ARM, c.ARM_CUBES, 65)
+    servo.move(c.WRIST, c.WRIST_CUBES, 65)
+
     spin(30, 45)  # turn a bit towards the line
     msleep(250)
 
@@ -227,10 +237,10 @@ def collect_poms_new():
 
     print("picking up pom 1")
     servo.move(c.ARM, c.ARM_DOWN + 100, 10)  # was originally + 50
-    collect_red_pom(c.ARM_DOWN + 50, c.WRIST_POM)  # originally ARM_DOWN + 0
+    collect_red_pom(c.ARM_DOWN + 60, c.WRIST_POM)  # originally ARM_DOWN +50
 
     print("picking up pom 2")
-    servo.move(c.ARM, c.ARM_DOWN + 75, 10)
+    servo.move(c.ARM, c.ARM_DOWN + 60, 10)  # originally + 75
     drive_distance_default(10, 3.5)
     collect_green_pom(c.ARM_DOWN - pc(50, 25), c.WRIST_POM)  # clone used to be 0
 
